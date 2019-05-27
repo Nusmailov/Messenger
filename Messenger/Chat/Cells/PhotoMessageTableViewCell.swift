@@ -8,7 +8,7 @@
 
 import UIKit
 import SnapKit
-
+import AVKit
 
 protocol StartStopAnimatingDelegate: class{
     func didTapStopButton()
@@ -20,7 +20,7 @@ class PhotoMessageTableViewCell: UITableViewCell {
     var centerContraint:Constraint?
     var leadingContraint:Constraint?
     var trailingContraint:Constraint?
-    var stateTimer: Bool?
+    var stateTimer: Int!
     var stateAnimating: Bool!
     var starter: Bool = false
 //    let blurEffect = UIBlurEffect(style: .light)
@@ -28,14 +28,14 @@ class PhotoMessageTableViewCell: UITableViewCell {
     private var pathCenter: CGPoint{ get{ return self.convert(self.center, from:self.superview) } }
     var progressBar: ProgressBarView!
     var delegate: StartStopAnimatingDelegate?
+    var radianRotate = CGFloat(Double.pi)/18
+    weak var rotateViewTimer: Timer!
+    
     var progressCounter: Float = 0 {
         didSet {
             showProgressInAction()
         }
     }
-    
-    var radianRotate = CGFloat(Double.pi)/18
-    weak var rotateViewTimer: Timer!
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -48,7 +48,7 @@ class PhotoMessageTableViewCell: UITableViewCell {
     
     fileprivate func setupViews(){
         addSubview(bubbleView)
-        stateTimer = true
+        stateTimer = 1
         stateAnimating = false
         starter = false
         bubbleView.isUserInteractionEnabled = true
@@ -137,7 +137,6 @@ class PhotoMessageTableViewCell: UITableViewCell {
         if(progressCounter >= 100) {
             progressCounter = 0
             starter = false
-            stateTimer = nil
             showHideAnimating()
             if rotateViewTimer != nil {
                 rotateViewTimer.invalidate()
@@ -147,21 +146,40 @@ class PhotoMessageTableViewCell: UITableViewCell {
     }
     
     @objc func actionLoader(){
-        if(stateTimer!){
+        if(stateTimer == 1){
             actionButton.setImage(UIImage(named: "download-icon"), for: .normal)
             delegate?.didTapStopButton()
             progressBar.progress = 0
             radianRotate = 0
-            stateTimer = false
-        }else if(!stateTimer!){
+            stateTimer = 2
+        }
+        else if(stateTimer == 2){
             actionButton.setImage(UIImage(named: "close"), for: .normal)
             delegate?.didTapStartButton()
-            stateTimer = true
-        }else{
+            stateTimer = 1
+        }
+        else if(stateTimer == 3){
             actionButton.setImage(UIImage(named: "play-button"), for: .normal)
             delegate?.didTapStartVideo()
         }
         startAnimatingIfNeeded()
+    }
+    
+    public static func videoSnapshot(filePathLocal: NSString) -> UIImage? {
+        let vidURL = NSURL(fileURLWithPath:filePathLocal as String)
+        let asset = AVURLAsset(url: vidURL as URL)
+        let generator = AVAssetImageGenerator(asset: asset)
+        generator.appliesPreferredTrackTransform = true
+        let timestamp = CMTime(seconds: 1, preferredTimescale: 60)
+        do {
+            let imageRef = try generator.copyCGImage(at: timestamp, actualTime: nil)
+            return UIImage(cgImage: imageRef)
+        }
+        catch let error as NSError
+        {
+            print("Image generation failed with error \(error)")
+            return nil
+        }
     }
     
     //MARK: Verstka

@@ -64,14 +64,12 @@ class ChatViewCell: UITableViewCell {
             trailingContraint?.activate()
         }
     }
-    
     let bubbleView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(white: 0.95, alpha: 1)
         view.layer.cornerRadius = 15
         return view
     }()
-    
     let profileImage: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -79,7 +77,6 @@ class ChatViewCell: UITableViewCell {
         imageView.layer.masksToBounds = true
         return imageView
     }()
-   
     let messageLabel: UILabel = {
         var text = UILabel()
         text.font = UIFont.systemFont(ofSize: 16.0)
@@ -89,6 +86,5 @@ class ChatViewCell: UITableViewCell {
         text.sizeToFit()
         return text
     }()
-    
 }
 

@@ -11,6 +11,8 @@ import SnapKit
 import SVProgressHUD
 import SDWebImage
 import CoreData
+import AVKit
+import AVFoundation
 
 class ChatTableViewController: UIViewController {
     //MARK: - Fields
@@ -52,7 +54,6 @@ class ChatTableViewController: UIViewController {
         keyboardHeight()
     }
     
-    
     // MARK: - Button Actions
     @objc func showActionSheet(){
         let actionSheet = UIAlertController(title: "Photo", message: "", preferredStyle: .actionSheet)
@@ -81,7 +82,6 @@ class ChatTableViewController: UIViewController {
             }
             self.present(coordinator.navigationController, animated: true)
         }
-        
         let camera = UIAlertAction(title: "Camera", style: .default){action in
             let coordinator = MediaCoordinator()
             coordinator.start(type: .Camera)
@@ -101,8 +101,7 @@ class ChatTableViewController: UIViewController {
             }
             self.present(coordinator.navigationController, animated: true)
         }
-        
-        let AddImage = UIAlertAction(title: "AddImage", style: .default) { (action) in
+        let addImage = UIAlertAction(title: "Add Image", style: .default) { (action) in
             let mark = Friend()
             mark.name = "Mark Zuckerberg"
             let message = Message()
@@ -115,14 +114,25 @@ class ChatTableViewController: UIViewController {
                 self.downloader.download()
             }
         }
+        let addVideo = UIAlertAction(title: "Add Video", style: .default) { (action) in
+            let message = Message()
+            message.status = .inComing
+            message.image = UIImage()
+            do{
+                self.messages = [message]  + self.messages
+                self.tableView.reloadData()
+                self.downloader.download()
+            }
+        }
         
         actionSheet.addAction(cancel)
         actionSheet.addAction(camera)
         actionSheet.addAction(photo)
-        actionSheet.addAction(AddImage)
+        actionSheet.addAction(addImage)
+        actionSheet.addAction(addVideo)
+        
         present(actionSheet, animated: true, completion: nil)
     }
-    
     @objc func addMessage(){
         let mark = Friend()
         mark.name = "Mark Zuckerberg"
@@ -136,8 +146,8 @@ class ChatTableViewController: UIViewController {
             tableView.reloadData()
             textView.text = ""
         }
+        
     }
-    
     @objc func handleKeyboard(notification: NSNotification){
         if let userInfo = notification.userInfo {
             let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as AnyObject).cgRectValue
@@ -159,8 +169,7 @@ class ChatTableViewController: UIViewController {
             }, completion: { (completed) in })
         }
     }
-    
-    //MARK: - Setup View
+    //MARK: - SetupViews
     fileprivate func setupTableView(){
         tableView.delegate = self
         tableView.dataSource = self
@@ -171,7 +180,6 @@ class ChatTableViewController: UIViewController {
         tableView.transform = CGAffineTransform(scaleX: 1, y: -1)
         tableView.separatorStyle = .none
     }
-    
     fileprivate func setupTextContainer(){
         view.addSubview(textContainer)
         view.addSubview(tableView)
@@ -214,6 +222,7 @@ class ChatTableViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboard), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
+    
     //MARK: - Verstka
     let textContainer: UIView = {
         let view = UIView()
@@ -306,7 +315,9 @@ extension ChatTableViewController: DownloaderDelegate{
         messages[0].urlVideo = path
         DispatchQueue.main.async {
             if let cell = self.tableView.cellForRow(at: .init(row: 0, section: 0)) as? PhotoMessageTableViewCell {
-                cell.stateTimer = nil
+                cell.stateTimer = 3
+                cell.actionButton.isHidden = false
+                cell.imageMessage.image = try? PhotoMessageTableViewCell.videoSnapshot(filePathLocal: String(contentsOf: self.messages[0].urlVideo!) as NSString)
             }
         }
     }
@@ -336,15 +347,15 @@ extension ChatTableViewController: DownloaderDelegate{
 
 extension ChatTableViewController: StartStopAnimatingDelegate{
     func didTapStartVideo() {
-        
+        let player = AVPlayer(url: messages[0].urlVideo!)
+        let vc = AVPlayerViewController()
+        vc.player = player
+        self.present(vc, animated: true) { vc.player?.play() }
     }
-    
     func didTapStopButton() {
         self.downloader.stopDownloading()
     }
-    
     func didTapStartButton() {
         self.downloader.download()
     }
-    
 }

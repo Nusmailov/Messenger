@@ -11,7 +11,6 @@ import SnapKit
 
 class ChatSectionViewCell: UICollectionReusableView {
     
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(mainView)
@@ -37,7 +36,6 @@ class ChatSectionViewCell: UICollectionReusableView {
         view.layer.masksToBounds = true
         return view
     }()
-    
     let labelText: UILabel = {
         let text = UILabel()
         text.text = "Today"
