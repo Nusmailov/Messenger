@@ -87,4 +87,3 @@ class ChatViewCell: UITableViewCell {
         return text
     }()
 }
-

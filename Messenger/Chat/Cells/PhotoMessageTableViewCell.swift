@@ -127,7 +127,7 @@ class PhotoMessageTableViewCell: UITableViewCell {
     }
     
     fileprivate func showHideAnimating(){
-        actionButton.isHidden = stateAnimating
+//        actionButton.isHidden = stateAnimating
         blurView.isHidden = stateAnimating
         progressBar.isHidden = stateAnimating
         stateAnimating = !stateAnimating
@@ -138,13 +138,13 @@ class PhotoMessageTableViewCell: UITableViewCell {
             progressCounter = 0
             starter = false
             showHideAnimating()
+            
             if rotateViewTimer != nil {
                 rotateViewTimer.invalidate()
             }
         }
         progressBar.progress = progressCounter/100
     }
-    
     @objc func actionLoader(){
         if(stateTimer == 1){
             actionButton.setImage(UIImage(named: "download-icon"), for: .normal)
@@ -166,7 +166,7 @@ class PhotoMessageTableViewCell: UITableViewCell {
     }
     
     public static func videoSnapshot(filePathLocal: NSString) -> UIImage? {
-        let vidURL = NSURL(fileURLWithPath:filePathLocal as String)
+        let vidURL = NSURL(fileURLWithPath: filePathLocal as String)
         let asset = AVURLAsset(url: vidURL as URL)
         let generator = AVAssetImageGenerator(asset: asset)
         generator.appliesPreferredTrackTransform = true
@@ -221,5 +221,4 @@ class PhotoMessageTableViewCell: UITableViewCell {
         image.contentMode = .scaleAspectFill
         return image
     }()
-
 }

@@ -6,11 +6,20 @@
         <attribute name="phone" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="surname" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
-    <entity name="LOL" representedClassName="LOL" syncable="YES" codeGenerationType="class">
-        <attribute name="lol" optional="YES" attributeType="String" syncable="YES"/>
+    <entity name="DBFriend" representedClassName="DBFriend" syncable="YES" codeGenerationType="class">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="profileImage" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="DBMessage" representedClassName="DBMessage" syncable="YES" codeGenerationType="class">
+        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="urlVideo" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="friend" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DBFriend" syncable="YES"/>
     </entity>
     <elements>
-        <element name="DBContact" positionX="-63" positionY="-18" width="128" height="105"/>
-        <element name="LOL" positionX="-45" positionY="27" width="128" height="60"/>
+        <element name="DBContact" positionX="-580.0546875" positionY="159.203125" width="128" height="105"/>
+        <element name="DBFriend" positionX="-234.17578125" positionY="196.3828125" width="128" height="73"/>
+        <element name="DBMessage" positionX="-335.54296875" positionY="-21.8046875" width="128" height="118"/>
     </elements>
 </model>

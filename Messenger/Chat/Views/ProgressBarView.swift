@@ -13,20 +13,17 @@ class ProgressBarView: UIView {
     var bgPath: UIBezierPath!
     var shapeLayer: CAShapeLayer!
     var progressLayer: CAShapeLayer!
-    
     var progress: Float = 0 {
         willSet(newValue) {
             progressLayer.strokeEnd = CGFloat(newValue)
         }
     }
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         bgPath = UIBezierPath()
         self.simpleShape()
         isUserInteractionEnabled = true
     }
-    
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         bgPath = UIBezierPath()
@@ -37,14 +34,14 @@ class ProgressBarView: UIView {
         bgPath = UIBezierPath(arcCenter: self.center, radius: 25, startAngle: -CGFloat.pi/2, endAngle: CGFloat.pi + CGFloat.pi/2, clockwise: true)
         shapeLayer = CAShapeLayer()
         shapeLayer.path = bgPath.cgPath
-        shapeLayer.lineWidth = 7
+        shapeLayer.lineWidth = 5
         shapeLayer.fillColor = nil
         shapeLayer.strokeColor = #colorLiteral(red: 0.9529411765, green: 0.9529411765, blue: 0.9529411765, alpha: 1)
         
         progressLayer = CAShapeLayer()
         progressLayer.path = bgPath.cgPath
         progressLayer.lineCap = CAShapeLayerLineCap.round
-        progressLayer.lineWidth = 7
+        progressLayer.lineWidth = 5
         progressLayer.fillColor = nil
         progressLayer.strokeColor = #colorLiteral(red: 0.05098039216, green: 0.7058823529, blue: 0.768627451, alpha: 1)
         progressLayer.strokeEnd = 0.0

@@ -27,6 +27,7 @@ class ChatTableViewController: UIViewController {
     var heightOfTextContainer = 70
     var bottomConstraint: NSLayoutConstraint?
     var progressProcent = Float()
+    var coreMessage: [NSManagedObject] = []
     
     var friend: Friend?{
         didSet{
@@ -41,6 +42,7 @@ class ChatTableViewController: UIViewController {
         self.navigationController?.setNavigationBarHidden(false, animated: animated)
         self.navigationController!.navigationBar.tintColor = UIColor.black;
         tabBarController?.tabBar.isHidden = true
+//        fetchMessage()
     }
     
     override func viewDidLoad() {
@@ -52,6 +54,10 @@ class ChatTableViewController: UIViewController {
         setupTableView()
         setupTextContainer()
         keyboardHeight()
+        
+        saveMessage(Message(text: "HelloWorld", date: Date(), friend: Friend(), status: 1))
+        
+        print("yeah")
     }
     
     // MARK: - Button Actions
@@ -64,11 +70,7 @@ class ChatTableViewController: UIViewController {
             coordinator.didPickMedia = { (image,text) in
                 let mark = Friend()
                 mark.name = "Mark Zuckerberg"
-                let message = Message()
-                message.friend = mark
-                message.text = text
-                message.image = image
-                message.status = .outGoing
+                let message = Message(text: text ?? "", date: Date(), friend: mark, status: 0)
                 do{
                     self.messages = [message] + self.messages
                     self.tableView.reloadData()
@@ -88,11 +90,7 @@ class ChatTableViewController: UIViewController {
             coordinator.didPickMedia = { (image, text) in
                 let mark = Friend()
                 mark.name = "Mark Zuckerberg"
-                let message = Message()
-                message.friend = mark
-                message.text = text
-                message.image = image
-                message.status = .outGoing
+                let message = Message(text: text ?? "", date: Date(), friend: mark, status: 0)
                 do{
                     self.messages = [message] + self.messages
                     self.tableView.reloadData()
@@ -104,10 +102,7 @@ class ChatTableViewController: UIViewController {
         let addImage = UIAlertAction(title: "Add Image", style: .default) { (action) in
             let mark = Friend()
             mark.name = "Mark Zuckerberg"
-            let message = Message()
-            message.friend = mark
-            message.image = UIImage()
-            message.status = .inComing
+            let message = Message(text: self.textView.text ?? "", date: Date(), friend: mark, status: 0)
             do{
                 self.messages = [message] + self.messages
                 self.tableView.reloadData()
@@ -115,9 +110,7 @@ class ChatTableViewController: UIViewController {
             }
         }
         let addVideo = UIAlertAction(title: "Add Video", style: .default) { (action) in
-            let message = Message()
-            message.status = .inComing
-            message.image = UIImage()
+            let message = Message(text: self.textView.text ?? "", date: Date(), friend: Friend(), status: 0)
             do{
                 self.messages = [message]  + self.messages
                 self.tableView.reloadData()
@@ -130,17 +123,12 @@ class ChatTableViewController: UIViewController {
         actionSheet.addAction(photo)
         actionSheet.addAction(addImage)
         actionSheet.addAction(addVideo)
-        
         present(actionSheet, animated: true, completion: nil)
     }
     @objc func addMessage(){
         let mark = Friend()
         mark.name = "Mark Zuckerberg"
-        let message = Message()
-        message.friend = mark
-        message.text = textView.text
-        message.date = NSDate()
-        message.status = .outGoing
+        let message = Message(text: textView.text, date: Date(), friend: mark, status: 0)
         do{
             messages = [message] + messages
             tableView.reloadData()
@@ -223,7 +211,37 @@ class ChatTableViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
-    //MARK: - Verstka
+    fileprivate func fetchMessage(){
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let fetchResult = NSFetchRequest<NSManagedObject>(entityName: "DBMessage")
+        do {
+            coreMessage = try managedContext.fetch(fetchResult)
+        }
+        catch let error {
+            print("Could not fetch. Due to: \(error.localizedDescription)")
+        }
+    }
+    
+    private func saveMessage(_ message: Message){
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let entity = NSEntityDescription.entity(forEntityName: "DBMessage", in: managedContext)!
+        let dbmessage = NSManagedObject(entity: entity, insertInto: managedContext)
+        dbmessage.setValue(message.text, forKeyPath: "text")
+        dbmessage.setValue(message.status.rawValue, forKeyPath: "type")
+        dbmessage.setValue(message.urlVideo, forKeyPath: "urlVideo")
+        dbmessage.setValue(message.friend, forKeyPath: "friend")
+        dbmessage.setValue(message.date, forKeyPath: "date")
+        do {
+            try managedContext.save()
+            messages.append(message)
+        }
+        catch let error {
+            print("Could not save. Due to: \(error.localizedDescription)")
+        }
+    }
+    //MARK: - Views
     let textContainer: UIView = {
         let view = UIView()
         view.backgroundColor = .white
@@ -267,13 +285,12 @@ extension ChatTableViewController: UITableViewDataSource, UITableViewDelegate{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return messages.count
     }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let image = messages[indexPath.item].image {
             let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! PhotoMessageTableViewCell
             cell.imageMessage.image = image
             cell.messageLabel.text = messages[indexPath.item].text
-            cell.setStatus(status: messages[indexPath.item].status!)
+            cell.setStatus(status: messages[indexPath.item].status)
             cell.transform = CGAffineTransform(scaleX: 1, y: -1)
             cell.selectionStyle = .none
             cell.delegate = self
@@ -281,15 +298,13 @@ extension ChatTableViewController: UITableViewDataSource, UITableViewDelegate{
         }else{
             let cell = tableView.dequeueReusableCell(withIdentifier: chatCellId, for: indexPath) as! ChatViewCell
             cell.messageLabel.text = messages[indexPath.item].text
-            cell.setStatus(status: messages[indexPath.item].status!)
+            cell.setStatus(status: messages[indexPath.item].status)
             cell.transform = CGAffineTransform(scaleX: 1, y: -1)
             cell.selectionStyle = .none
             return cell
         }
     }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
-    {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat{
         return UITableView.automaticDimension
     }
 }
@@ -311,13 +326,22 @@ extension ChatTableViewController: MessageView{
 
 extension ChatTableViewController: DownloaderDelegate{
     
-    func didFinish(path: URL) {
+    func didFinish(path: String) {
         messages[0].urlVideo = path
         DispatchQueue.main.async {
             if let cell = self.tableView.cellForRow(at: .init(row: 0, section: 0)) as? PhotoMessageTableViewCell {
                 cell.stateTimer = 3
                 cell.actionButton.isHidden = false
-                cell.imageMessage.image = try? PhotoMessageTableViewCell.videoSnapshot(filePathLocal: String(contentsOf: self.messages[0].urlVideo!) as NSString)
+                do{
+                    let url = URL(string: path)
+                    let urlString = try String(contentsOf: url!)
+                    let objCStringUrl:NSString = NSString(string:urlString)
+                    cell.imageMessage.image = try? PhotoMessageTableViewCell.videoSnapshot(filePathLocal: objCStringUrl)
+                    print(cell.imageMessage.image!)
+                }catch{
+                    print(error)
+                }
+                cell.actionButton.setImage(UIImage(named: "play-button"), for: .normal)
             }
         }
     }
@@ -327,6 +351,7 @@ extension ChatTableViewController: DownloaderDelegate{
         DispatchQueue.main.async {
             if let cell = self.tableView.cellForRow(at: .init(row: 0, section: 0)) as? PhotoMessageTableViewCell {
                 cell.imageMessage.image = image
+                cell.actionButton.isHidden = true
             }
         }
     }
@@ -344,18 +369,23 @@ extension ChatTableViewController: DownloaderDelegate{
     
 }
 
-
+// MARK: StartStopAnimatingDelegates
 extension ChatTableViewController: StartStopAnimatingDelegate{
+    
     func didTapStartVideo() {
-        let player = AVPlayer(url: messages[0].urlVideo!)
+        let url = URL(string: messages[0].urlVideo!)
+        let player = AVPlayer(url: url!)
         let vc = AVPlayerViewController()
         vc.player = player
         self.present(vc, animated: true) { vc.player?.play() }
     }
+    
     func didTapStopButton() {
         self.downloader.stopDownloading()
     }
+    
     func didTapStartButton() {
         self.downloader.download()
     }
+    
 }

@@ -21,6 +21,8 @@
 		F519E640224B94B700B2BD83 /* ChatViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F519E63F224B94B700B2BD83 /* ChatViewCell.swift */; };
 		F527A84A2276F3650034AB8D /* ProgressBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F527A8492276F3650034AB8D /* ProgressBarView.swift */; };
 		F52B23B9227AFD7A00B34062 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F52B23B8227AFD7A00B34062 /* Photo.swift */; };
+		F5357E4722A51E2800B6342F /* MessageRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5357E4622A51E2800B6342F /* MessageRepository.swift */; };
+		F5357E4922A5356700B6342F /* FriendRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5357E4822A5356700B6342F /* FriendRepository.swift */; };
 		F590D782224939570013839E /* ContactViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F590D781224939570013839E /* ContactViewCell.swift */; };
 		F590D78422493BDB0013839E /* BaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F590D78322493BDB0013839E /* BaseCell.swift */; };
 		F59A9C12224A44F800AF61BF /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59A9C11224A44F800AF61BF /* Contact.swift */; };
@@ -56,6 +58,8 @@
 		F519E63F224B94B700B2BD83 /* ChatViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewCell.swift; sourceTree = "<group>"; };
 		F527A8492276F3650034AB8D /* ProgressBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBarView.swift; sourceTree = "<group>"; };
 		F52B23B8227AFD7A00B34062 /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
+		F5357E4622A51E2800B6342F /* MessageRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageRepository.swift; sourceTree = "<group>"; };
+		F5357E4822A5356700B6342F /* FriendRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRepository.swift; sourceTree = "<group>"; };
 		F590D781224939570013839E /* ContactViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactViewCell.swift; sourceTree = "<group>"; };
 		F590D78322493BDB0013839E /* BaseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCell.swift; sourceTree = "<group>"; };
 		F59A9C11224A44F800AF61BF /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
@@ -127,7 +131,9 @@
 				F5F149A82293FDFF008C2338 /* Views */,
 				F5F149A62293FDDD008C2338 /* Model */,
 				F5D295C6225DADA300C47961 /* MessengerPresenter.swift */,
+				F5357E4622A51E2800B6342F /* MessageRepository.swift */,
 				F510D630227B129300FECC5D /* PhotoService.swift */,
+				F5357E4822A5356700B6342F /* FriendRepository.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -377,6 +383,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F508D23E2257226F0029F9E8 /* ContactRepository.swift in Sources */,
+				F5357E4922A5356700B6342F /* FriendRepository.swift in Sources */,
 				F519E640224B94B700B2BD83 /* ChatViewCell.swift in Sources */,
 				F59A9C12224A44F800AF61BF /* Contact.swift in Sources */,
 				F590D78422493BDB0013839E /* BaseCell.swift in Sources */,
@@ -387,6 +394,7 @@
 				F5A3AE8A224936B6005A9B99 /* AppDelegate.swift in Sources */,
 				F508D242225765480029F9E8 /* ChatSectionViewCell.swift in Sources */,
 				F52B23B9227AFD7A00B34062 /* Photo.swift in Sources */,
+				F5357E4722A51E2800B6342F /* MessageRepository.swift in Sources */,
 				F5D53503224DE65700F3DF5F /* Message.swift in Sources */,
 				F5E1640C226DCDB600DD8653 /* PhotoMessageTableViewCell.swift in Sources */,
 				F508D23C2257177B0029F9E8 /* Core.xcdatamodeld in Sources */,
