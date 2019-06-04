@@ -12,13 +12,13 @@ import UIKit
 
 class ContactRepository {
     
-    private var managedContext: NSManagedObjectContext? {
+    private static  var managedContext: NSManagedObjectContext? {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return nil }
         return appDelegate.persistentContainer.viewContext
     }
     
     
-    func updateContact(withName name: String, to updatedName: String) throws {
+    static func updateContact(withName name: String, to updatedName: String) throws {
         guard let managedContext = self.managedContext else { return }
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "DBContact")
         fetchRequest.predicate = NSPredicate(format: "name = %@", name)
@@ -28,7 +28,7 @@ class ContactRepository {
         try managedContext.save()
     }
     
-    func deleteContact(withName name: String) throws {
+    static func deleteContact(withName name: String) throws {
         guard let managedContext = self.managedContext else { return }
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "DBContact")
         fetchRequest.predicate = NSPredicate(format: "name = %@", name)
@@ -38,7 +38,7 @@ class ContactRepository {
         try managedContext.save()
     }
     
-    func addContact(withName name: String, surname: String, phone:String) throws {
+    static func addContact(withName name: String, surname: String, phone:String) throws {
         guard let managedContext = self.managedContext else { return }
         let entity = NSEntityDescription.entity(forEntityName: "DBContact", in: managedContext)!
         let contact = NSManagedObject(entity: entity, insertInto: managedContext)
@@ -48,7 +48,7 @@ class ContactRepository {
         try managedContext.save()
     }
     
-    func fetchContacts(usingFilter filter: Filter = .none) -> [Contact]{
+    static func retrieveContacts(usingFilter filter: Filter = .none) -> [Contact]{
         guard let managedContext = self.managedContext else { return [] }
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "DBContact")
         switch filter {

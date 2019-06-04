@@ -27,7 +27,9 @@ class ChatTableViewController: UIViewController {
     var heightOfTextContainer = 70
     var bottomConstraint: NSLayoutConstraint?
     var progressProcent = Float()
-    var coreMessage: [NSManagedObject] = []
+    var coreMessages: [Message] = []
+    var coreFriends: [Friend] = []
+    var dbFriend: [DBFriend] = []
     
     var friend: Friend?{
         didSet{
@@ -42,22 +44,17 @@ class ChatTableViewController: UIViewController {
         self.navigationController?.setNavigationBarHidden(false, animated: animated)
         self.navigationController!.navigationBar.tintColor = UIColor.black;
         tabBarController?.tabBar.isHidden = true
-//        fetchMessage()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        presenter.view = self
         self.downloader.delegate = self
-        presenter.getMessages()
         setupTableView()
         setupTextContainer()
         keyboardHeight()
-        
-        saveMessage(Message(text: "HelloWorld", date: Date(), friend: Friend(), status: 1))
-        
-        print("yeah")
+        dbFriend = FriendRepository.retrieveDBFriend()
+        messages = MessageRepository.retrieveMessages()
     }
     
     // MARK: - Button Actions
@@ -70,13 +67,12 @@ class ChatTableViewController: UIViewController {
             coordinator.didPickMedia = { (image,text) in
                 let mark = Friend()
                 mark.name = "Mark Zuckerberg"
-                let message = Message(text: text ?? "", date: Date(), friend: mark, status: 0)
+                let message = Message(text: text ?? "", date: Date.init(timeIntervalSinceNow: 86400), status: .outGoing, image: UIImage(), dbfriend: DBFriend())
                 do{
                     self.messages = [message] + self.messages
                     self.tableView.reloadData()
                     let index = IndexPath(row: 0, section: 0)
                     if let cell = self.tableView.cellForRow(at: index) as? PhotoMessageTableViewCell {
-                        
                         cell.startAnimatingIfNeeded()
                     }
                 }
@@ -90,7 +86,7 @@ class ChatTableViewController: UIViewController {
             coordinator.didPickMedia = { (image, text) in
                 let mark = Friend()
                 mark.name = "Mark Zuckerberg"
-                let message = Message(text: text ?? "", date: Date(), friend: mark, status: 0)
+                let message = Message(text: text ?? "", date: Date.init(timeIntervalSinceNow: 86400), status: .outGoing, image: UIImage(), dbfriend: DBFriend())
                 do{
                     self.messages = [message] + self.messages
                     self.tableView.reloadData()
@@ -102,7 +98,7 @@ class ChatTableViewController: UIViewController {
         let addImage = UIAlertAction(title: "Add Image", style: .default) { (action) in
             let mark = Friend()
             mark.name = "Mark Zuckerberg"
-            let message = Message(text: self.textView.text ?? "", date: Date(), friend: mark, status: 0)
+            let message = Message(text: self.textView.text ?? "", date: Date.init(timeIntervalSinceNow: 86400), status: .outGoing, image: UIImage(), dbfriend: DBFriend())
             do{
                 self.messages = [message] + self.messages
                 self.tableView.reloadData()
@@ -110,7 +106,7 @@ class ChatTableViewController: UIViewController {
             }
         }
         let addVideo = UIAlertAction(title: "Add Video", style: .default) { (action) in
-            let message = Message(text: self.textView.text ?? "", date: Date(), friend: Friend(), status: 0)
+            let message = Message(text: self.textView.text ?? "", date: Date.init(timeIntervalSinceNow: 86400), status: .outGoing, image: UIImage(), dbfriend: DBFriend())
             do{
                 self.messages = [message]  + self.messages
                 self.tableView.reloadData()
@@ -128,13 +124,12 @@ class ChatTableViewController: UIViewController {
     @objc func addMessage(){
         let mark = Friend()
         mark.name = "Mark Zuckerberg"
-        let message = Message(text: textView.text, date: Date(), friend: mark, status: 0)
+        let message = Message(text: textView.text ?? "", date: Date.init(timeIntervalSinceNow: 86400), status: .outGoing, image: UIImage(), dbfriend: DBFriend())
         do{
             messages = [message] + messages
             tableView.reloadData()
             textView.text = ""
         }
-        
     }
     @objc func handleKeyboard(notification: NSNotification){
         if let userInfo = notification.userInfo {
@@ -211,36 +206,6 @@ class ChatTableViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
-    fileprivate func fetchMessage(){
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        let managedContext = appDelegate.persistentContainer.viewContext
-        let fetchResult = NSFetchRequest<NSManagedObject>(entityName: "DBMessage")
-        do {
-            coreMessage = try managedContext.fetch(fetchResult)
-        }
-        catch let error {
-            print("Could not fetch. Due to: \(error.localizedDescription)")
-        }
-    }
-    
-    private func saveMessage(_ message: Message){
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        let managedContext = appDelegate.persistentContainer.viewContext
-        let entity = NSEntityDescription.entity(forEntityName: "DBMessage", in: managedContext)!
-        let dbmessage = NSManagedObject(entity: entity, insertInto: managedContext)
-        dbmessage.setValue(message.text, forKeyPath: "text")
-        dbmessage.setValue(message.status.rawValue, forKeyPath: "type")
-        dbmessage.setValue(message.urlVideo, forKeyPath: "urlVideo")
-        dbmessage.setValue(message.friend, forKeyPath: "friend")
-        dbmessage.setValue(message.date, forKeyPath: "date")
-        do {
-            try managedContext.save()
-            messages.append(message)
-        }
-        catch let error {
-            print("Could not save. Due to: \(error.localizedDescription)")
-        }
-    }
     //MARK: - Views
     let textContainer: UIView = {
         let view = UIView()
@@ -309,20 +274,6 @@ extension ChatTableViewController: UITableViewDataSource, UITableViewDelegate{
     }
 }
 // MARK: - Presenter Realization
-extension ChatTableViewController: MessageView{
-    func showMessages(messages: [Message]) {
-        self.messages = messages
-    }
-    func showLoading() {
-        SVProgressHUD.show()
-    }
-    func hideLoading() {
-        SVProgressHUD.dismiss()
-    }
-    func showError(errorMessage: String) {
-        print(errorMessage)
-    }
-}
 
 extension ChatTableViewController: DownloaderDelegate{
     
@@ -332,12 +283,8 @@ extension ChatTableViewController: DownloaderDelegate{
             if let cell = self.tableView.cellForRow(at: .init(row: 0, section: 0)) as? PhotoMessageTableViewCell {
                 cell.stateTimer = 3
                 cell.actionButton.isHidden = false
-                do{
-                    let url = URL(string: path)
-                    let urlString = try String(contentsOf: url!)
-                    let objCStringUrl:NSString = NSString(string:urlString)
-                    cell.imageMessage.image = try? PhotoMessageTableViewCell.videoSnapshot(filePathLocal: objCStringUrl)
-                    print(cell.imageMessage.image!)
+                do {
+                    try MessageRepository.createDBMessage(withText: "This is America", withDate: Date.init(timeIntervalSinceNow: 86400), status: 1, friend: self.dbFriend[0], urlVideo: path)
                 }catch{
                     print(error)
                 }

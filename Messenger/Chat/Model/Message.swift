@@ -34,32 +34,36 @@ enum MessageType: Int {
 class Message {
     var text: String?
     var date: Date
-    var friend: Friend
+//    var friend: Friend
+    var dbfriend: DBFriend
     var status: MessageType
     var image: UIImage?
     var urlVideo: String?
+    var urlImage: String?
     
-    init(text: String, date: Date, friend: Friend, status: Int){
+    init(text: String, date: Date, status: Int, dbfriend: DBFriend){
         self.text = text
         self.date = date
-        self.friend = friend
         self.status = MessageType(rawValue: status) ?? .inComing
+        self.dbfriend = dbfriend
     }
    
-    init(text: String, date: Date, friend: Friend, status: MessageType, image: UIImage){
+    init(text: String, date: Date, status: MessageType, image: UIImage, dbfriend: DBFriend){
         self.text = text
         self.date = date
-        self.friend = friend
         self.status = status
         self.image = image
+        self.dbfriend = dbfriend
     }
+    
     
     init(fromMessage message: NSManagedObject) {
         self.text = (message.value(forKey: "text") as? String) ?? ""
-        self.friend = (message.value(forKey: "friend") as? Friend)!
-        self.status = (message.value(forKey: "status") as? Int).map { MessageType(rawValue: $0) ?? .inComing }!
+        self.dbfriend = (message.value(forKey: "friend") as? DBFriend)!
+        self.status = (message.value(forKey: "type") as? Int).map { MessageType(rawValue: $0) ?? .inComing }!
         self.urlVideo = (message.value(forKey: "urlVideo" )as? String) ?? ""
+        self.urlImage = (message.value(forKey: "urlImage" )as? String) ?? ""
         self.date = (message.value(forKey: "date") as? Date)!
     }
-    
+
 }

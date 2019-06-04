@@ -16,15 +16,6 @@ class MessagePresenter{
     
     func getMessages(){
         view?.showLoading()
-        let mark = Friend()
-        mark.name = "Mark Zuckerberg"
-        let textString = "Good morning Steve Jobs Good morning Steve Jobs Good morning Steve Jobs Good morning Steve Jobs Good morning Steve Jobs Good morning Steve Jobs Good morning Steve Jobs Good morning Steve Jobs Good morning Steve Jobs Good morning Steve Jobs Good morning Steve Jobs"
-        let message = Message(text: "Good morning Steve Jobs Good morning Steve Jobs Good morning", date: Date(), friend: mark, status: 0)
-        let message2 = Message(text: textString, date: Date(), friend: mark, status: 0)
-        
-        messages = [message, message2,message]
-        let message3 = Message(text: "Hello", date: Date(), friend: mark, status: 0 )
-        messages = [message3] + [message3] + [message2]  + messages
         view?.hideLoading()
         view?.showMessages(messages: messages)
     }

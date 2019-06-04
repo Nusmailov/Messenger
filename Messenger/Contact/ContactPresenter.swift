@@ -14,7 +14,6 @@ import CoreData
 class ContactPresenter {
     public weak var view: ContactView?
     
-    let contactRepository = ContactRepository()
     private var filter: Filter = .none
     
     private var contacts: [Contact] = []{
@@ -27,7 +26,7 @@ class ContactPresenter {
     var didFail: ((_ message: String) -> ()) = { _ in }
     
     func fetchContacts() {
-        contacts = contactRepository.fetchContacts(usingFilter: filter)
+        contacts = ContactRepository.retrieveContacts(usingFilter: filter)
     }
     
     func numberOfPeople() -> Int {
@@ -41,7 +40,7 @@ class ContactPresenter {
     func deleteContact(atRow row: Int){
         let name = getContact(atRow: row).name
         do{
-            try contactRepository.deleteContact(withName: name)
+            try ContactRepository.deleteContact(withName: name)
             fetchContacts()
         }catch{
             didFail("Failed to delete \(name)")
@@ -51,13 +50,6 @@ class ContactPresenter {
     func getContacts(){
         view?.showLoading()
         view?.hideLoading()
-        
-        contacts.append(Contact(name: "Steve", surname: "Jobs", phone: "879218912812"))
-        contacts.append(Contact(name: "Mark", surname: "Zucerberg", phone: "879218912812"))
-        contacts.append(Contact(name: "Ilon", surname: "Mask", phone: "879218912812"))
-        contacts.append(Contact(name: "John", surname: "Devison", phone: "879218912812"))
-        contacts.append(Contact(name: "Michael", surname: "Jackson", phone: "879218912812"))
-        
         view?.showContact(contacts: contacts)
     }
 }
