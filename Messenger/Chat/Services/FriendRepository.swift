@@ -16,6 +16,8 @@ class FriendRepository {
         return appDelegate.persistentContainer.viewContext
     }
     
+    // MARK: - Friend Core Data CRUD
+    
     static func updateFriend(withName name: String, to newName: String) throws {
         guard let managedContext = self.managedContext else { return }
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "DBFriend")
@@ -40,48 +42,51 @@ class FriendRepository {
         guard let managedContext = self.managedContext else { return }
         let entity = NSEntityDescription.entity(forEntityName: "DBFriend", in: managedContext)!
         let friend = NSManagedObject(entity: entity, insertInto: managedContext)
+        
         friend.setValue(name, forKeyPath: "name")
         friend.setValue(profileImage, forKeyPath: "profileImage")
+        
         try managedContext.save()
     }
     
-    static func retrieveFriends(usingFilter filter: Filter = .none) -> [Friend]{
+    static func retrieveFriends(usingFilter filter: Filter = .none) -> [Friend] {
         guard let managedContext = self.managedContext else { return [] }
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "DBFriend")
+        
         switch filter {
-        case .ascendingOrder:
-            fetchRequest.sortDescriptors = [NSSortDescriptor.init(key: "name", ascending: true)]
-        case .descendingOrder:
-            fetchRequest.sortDescriptors = [NSSortDescriptor.init(key: "name", ascending: false)]
-        case .search(let text):
-            fetchRequest.predicate = NSPredicate(format: "name contains[c] %@", text)
-        case .none:
-            break
+            case .ascendingOrder:
+                fetchRequest.sortDescriptors = [NSSortDescriptor.init(key: "name", ascending: true)]
+            case .descendingOrder:
+                fetchRequest.sortDescriptors = [NSSortDescriptor.init(key: "name", ascending: false)]
+            case .search(let text):
+                fetchRequest.predicate = NSPredicate(format: "name contains[c] %@", text)
+            case .none:
+                break
         }
+        
         do {
             return try managedContext.fetch(fetchRequest).map { Friend(withFriend: $0) }
-        }
-        catch{
+        } catch {
             return []
         }
     }
-    static func retrieveDBFriend(usingFilter filter: Filter = .none) -> [DBFriend]{
+    
+    static func retrieveDBFriend(usingFilter filter: Filter = .none) -> [DBFriend] {
         guard let managedContext = self.managedContext else { return [] }
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "DBFriend")
         switch filter {
-        case .ascendingOrder:
-            fetchRequest.sortDescriptors = [NSSortDescriptor.init(key: "name", ascending: true)]
-        case .descendingOrder:
-            fetchRequest.sortDescriptors = [NSSortDescriptor.init(key: "name", ascending: false)]
-        case .search(let text):
-            fetchRequest.predicate = NSPredicate(format: "name contains[c] %@", text)
-        case .none:
-            break
+            case .ascendingOrder:
+                fetchRequest.sortDescriptors = [NSSortDescriptor.init(key: "name", ascending: true)]
+            case .descendingOrder:
+                fetchRequest.sortDescriptors = [NSSortDescriptor.init(key: "name", ascending: false)]
+            case .search(let text):
+                fetchRequest.predicate = NSPredicate(format: "name contains[c] %@", text)
+            case .none:
+                break
         }
         do {
             return try managedContext.fetch(fetchRequest) as! [DBFriend]
-        }
-        catch{
+        } catch {
             return []
         }
     }

@@ -9,25 +9,26 @@ import Foundation
 import SwiftyJSON
 
 class Photos: Decodable {
-    var photos: Photooooo
+    var photos: PhotoRegister
     
-    struct Photooooo: Decodable {
+    struct PhotoRegister: Decodable {
         var photo: [Photo]?
     }
 }
 
-class Photo: Decodable{
+class Photo: Decodable {
     var farm : Int
-    var id : String
     var isfamily: Int
     var isfriend : Int
     var ispublic : Int
+    
     var owner : String
     var secret : String
     var server : String
     var title : String
+    var id : String
     
-    init(json: [String: Any]){
+    init(json: [String: Any]) {
         id = json["id"] as? String ?? ""
         owner = json["owner"] as? String ?? ""
         secret = json["secret"] as? String ?? ""
@@ -39,7 +40,7 @@ class Photo: Decodable{
         farm = json["farm"] as? Int ?? -1
     }
     
-    enum CodingKeys: String, CodingKey{
+    enum CodingKeys: String, CodingKey {
         case id = "id"
         case owner = "owner"
         case secret = "secret"

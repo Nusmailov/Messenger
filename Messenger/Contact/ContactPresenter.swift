@@ -13,17 +13,16 @@ import CoreData
 
 class ContactPresenter {
     public weak var view: ContactView?
-    
     private var filter: Filter = .none
-    
-    private var contacts: [Contact] = []{
-        didSet{
+    public var reloadData: (() -> ()) = { }
+    public var didFail: ((_ message: String) -> ()) = { _ in }
+    private var contacts: [Contact] = [] {
+        didSet {
             reloadData()
         }
     }
     
-    var reloadData: (() -> ()) = { }
-    var didFail: ((_ message: String) -> ()) = { _ in }
+    // MARK: - Contact Presenter Methods
     
     func fetchContacts() {
         contacts = ContactRepository.retrieveContacts(usingFilter: filter)
@@ -37,23 +36,23 @@ class ContactPresenter {
         return contacts[row]
     }
     
-    func deleteContact(atRow row: Int){
+    func deleteContact(atRow row: Int) {
         let name = getContact(atRow: row).name
-        do{
+        do {
             try ContactRepository.deleteContact(withName: name)
             fetchContacts()
-        }catch{
+        } catch {
             didFail("Failed to delete \(name)")
         }
     }
     
-    func getContacts(){
+    func getContacts() {
         view?.showLoading()
         view?.hideLoading()
         view?.showContact(contacts: contacts)
     }
 }
 
-protocol ContactView: BaseView{
+protocol ContactView: BaseView {
     func showContact(contacts: [Contact])
 }

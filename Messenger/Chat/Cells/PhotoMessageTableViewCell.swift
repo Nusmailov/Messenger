@@ -10,32 +10,36 @@ import UIKit
 import SnapKit
 import AVKit
 
-protocol StartStopAnimatingDelegate: class{
+protocol StartStopAnimatingDelegate: class {
     func didTapStopButton()
     func didTapStartButton()
     func didTapStartVideo()
 }
 
 class PhotoMessageTableViewCell: UITableViewCell {
-    var centerContraint:Constraint?
-    var leadingContraint:Constraint?
-    var trailingContraint:Constraint?
-    var stateTimer: Int!
-    var stateAnimating: Bool!
-    var starter: Bool = false
-//    let blurEffect = UIBlurEffect(style: .light)
-    lazy var blurView = UIVisualEffectView(effect:  UIBlurEffect(style: .light))
-    private var pathCenter: CGPoint{ get{ return self.convert(self.center, from:self.superview) } }
-    var progressBar: ProgressBarView!
-    var delegate: StartStopAnimatingDelegate?
-    var radianRotate = CGFloat(Double.pi)/18
-    weak var rotateViewTimer: Timer!
     
-    var progressCounter: Float = 0 {
+    //MARK: - File Fields
+    
+    private var stateAnimating:Bool!
+    private var starter:Bool = false
+    lazy var blurView = UIVisualEffectView(effect:  UIBlurEffect(style: .light))
+    private var pathCenter:CGPoint{ get{ return self.convert(self.center, from:self.superview) } }
+    public var stateTimer:Int!
+    public var radianRotate = CGFloat(Double.pi)/18
+    weak var rotateViewTimer:Timer!
+    public var progressCounter:Float = 0 {
         didSet {
             showProgressInAction()
         }
     }
+    
+    private var centerContraint:Constraint?
+    private var leadingContraint:Constraint?
+    private var trailingContraint:Constraint?
+    public var progressBar:ProgressBarView!
+    public var delegate:StartStopAnimatingDelegate?
+    
+    // MARK: - Cell Cycle methods
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -46,14 +50,11 @@ class PhotoMessageTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    fileprivate func setupViews(){
+    // MARK: - File Views
+    
+    fileprivate func setupViews() {
         addSubview(bubbleView)
-        stateTimer = 1
-        stateAnimating = false
-        starter = false
-        bubbleView.isUserInteractionEnabled = true
-        bubbleView.addSubview(imageMessage)
-        bubbleView.addSubview(messageLabel)
+        
         bubbleView.snp.makeConstraints { (make) in
             make.top.equalToSuperview().offset(10)
             make.bottom.equalToSuperview().offset(-10)
@@ -61,13 +62,24 @@ class PhotoMessageTableViewCell: UITableViewCell {
             leadingContraint = make.leading.equalToSuperview().offset(10).constraint
             trailingContraint = make.trailing.equalToSuperview().offset(-10).constraint
         }
+        
+        stateTimer = 1
+        stateAnimating = false
+        starter = false
+        
+        bubbleView.isUserInteractionEnabled = true
+        bubbleView.addSubview(imageMessage)
+        bubbleView.addSubview(messageLabel)
+        
         centerContraint?.activate()
+        
         imageMessage.isUserInteractionEnabled = true
         imageMessage.snp.makeConstraints { (make) in
             make.top.left.equalToSuperview().offset(5)
             make.right.equalToSuperview().offset(-5)
             make.size.equalTo(self.frame.width / 2)
         }
+        
         messageLabel.snp.makeConstraints { (make) in
             make.top.equalTo(imageMessage.snp.bottom).offset(5)
             make.left.equalToSuperview().offset(10)
@@ -75,23 +87,34 @@ class PhotoMessageTableViewCell: UITableViewCell {
         }
         
         imageMessage.addSubview(blurView)
-        blurView.isHidden = true
         blurView.isUserInteractionEnabled = true
         blurView.snp.makeConstraints { (make) in
             make.top.left.right.bottom.equalToSuperview()
         }
         
         progressBar = ProgressBarView(frame: CGRect(x: blurView.frame.width/2 - 25, y: blurView.frame.height/2 - 25, width: 50, height: 50))
-        progressBar.isHidden = true
-        imageMessage.addSubview(progressBar)
         
+        imageMessage.addSubview(progressBar)
         progressBar.snp.makeConstraints { (make) in
             make.center.equalToSuperview()
         }
+        progressBar.isHidden = true
         
+        imageMessage.addSubview(actionButton)
+        actionButton.snp.makeConstraints { (make) in
+            make.center.equalToSuperview()
+            make.height.width.equalTo(50)
+        }
+        actionButton.setImage(UIImage(named: "close"), for: .normal)
+        actionButton.imageView?.snp.makeConstraints { (make) in
+            make.top.left.equalToSuperview().offset(15)
+            make.right.bottom.equalToSuperview().offset(-15)
+        }
     }
-    // MARK: Operations
-    func setStatus(status: MessageType){
+    
+    // MARK: - Loading Process Action Methods
+    
+    func setStatus(status: MessageType) {
         centerContraint?.deactivate()
         leadingContraint?.deactivate()
         trailingContraint?.deactivate()
@@ -101,39 +124,27 @@ class PhotoMessageTableViewCell: UITableViewCell {
         else{ trailingContraint?.activate() }
     }
     
-    @objc func rotateView(){
+    @objc func rotateView() {
         radianRotate += CGFloat(Double.pi)/90
         radianRotate = radianRotate.truncatingRemainder(dividingBy: 360)
         progressBar.transform = CGAffineTransform(rotationAngle: CGFloat(radianRotate))
     }
     
-    func startAnimatingIfNeeded(){
+    func startAnimatingIfNeeded() {
         if !starter {
             starter = true
-            imageMessage.addSubview(actionButton)
-            actionButton.setImage(UIImage(named: "close"), for: .normal)
-            actionButton.snp.makeConstraints { (make) in
-                make.center.equalToSuperview()
-                make.height.width.equalTo(50)
-            }
-            
-            actionButton.imageView?.snp.makeConstraints { (make) in
-                make.top.left.equalToSuperview().offset(15)
-                make.right.bottom.equalToSuperview().offset(-15)
-            }
             showHideAnimating()
             rotateViewTimer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(rotateView), userInfo: nil, repeats: true)
         }
     }
     
-    fileprivate func showHideAnimating(){
-//        actionButton.isHidden = stateAnimating
+    fileprivate func showHideAnimating() {
         blurView.isHidden = stateAnimating
         progressBar.isHidden = stateAnimating
         stateAnimating = !stateAnimating
     }
     
-    @objc func showProgressInAction(){
+    @objc func showProgressInAction() {
         if(progressCounter >= 100) {
             progressCounter = 0
             starter = false
@@ -145,21 +156,21 @@ class PhotoMessageTableViewCell: UITableViewCell {
         }
         progressBar.progress = progressCounter/100
     }
-    @objc func actionLoader(){
-        if(stateTimer == 1){
+    
+    @objc func actionLoader() {
+        if(stateTimer == 1) {
             actionButton.setImage(UIImage(named: "download-icon"), for: .normal)
             delegate?.didTapStopButton()
             progressBar.progress = 0
             radianRotate = 0
             stateTimer = 2
         }
-        else if(stateTimer == 2){
+        else if(stateTimer == 2) {
             actionButton.setImage(UIImage(named: "close"), for: .normal)
             delegate?.didTapStartButton()
             stateTimer = 1
         }
-        else if(stateTimer == 3){
-            actionButton.setImage(UIImage(named: "play-button"), for: .normal)
+        else if(stateTimer == 3) {
             delegate?.didTapStartVideo()
         }
         startAnimatingIfNeeded()
@@ -174,15 +185,14 @@ class PhotoMessageTableViewCell: UITableViewCell {
         do {
             let imageRef = try generator.copyCGImage(at: timestamp, actualTime: nil)
             return UIImage(cgImage: imageRef)
-        }
-        catch let error as NSError
-        {
+        } catch let error as NSError{
             print("Image generation failed with error \(error)")
             return nil
         }
     }
     
-    //MARK: Verstka
+    // MARK: - File Views
+    
     let bubbleView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(white: 0.95, alpha: 1)
@@ -190,6 +200,7 @@ class PhotoMessageTableViewCell: UITableViewCell {
         view.isUserInteractionEnabled = true
         return view
     }()
+    
     lazy var actionButton: UIButton = {
         let button = UIButton()
         button.layer.cornerRadius = 25
@@ -197,6 +208,7 @@ class PhotoMessageTableViewCell: UITableViewCell {
         button.addTarget(self, action: #selector(actionLoader), for: .touchUpInside)
         return button
     }()
+    
     let profileImage: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -204,6 +216,7 @@ class PhotoMessageTableViewCell: UITableViewCell {
         imageView.layer.masksToBounds = true
         return imageView
     }()
+    
     var messageLabel: UILabel = {
         var text = UILabel()
         text.font = UIFont.systemFont(ofSize: 16.0)
@@ -213,6 +226,7 @@ class PhotoMessageTableViewCell: UITableViewCell {
         text.sizeToFit()
         return text
     }()
+    
     var imageMessage: UIImageView = {
         let image = UIImageView()
         image.layer.cornerRadius = 15

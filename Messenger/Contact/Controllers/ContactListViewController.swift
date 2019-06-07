@@ -15,10 +15,13 @@ import CoreData
 
 class ContactListViewController: UICollectionViewController {
     fileprivate var cellid = "cellId"
+    
     var contacts = [Contact]()
     let contactPresenter = ContactPresenter()
     var people: [Contact] = []
     var photoService: PhotoService?
+    
+    // MARK: - View controller lifecycle methods
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -35,14 +38,12 @@ class ContactListViewController: UICollectionViewController {
         collectionView.alwaysBounceVertical = true
         collectionView.backgroundColor = .white
         people = ContactRepository.retrieveContacts()
-        
     }
-    
-   
-    
 }
 
-extension ContactListViewController: ContactView{
+// MARK: - ContactView Extension Views
+
+extension ContactListViewController: ContactView {
     func showLoading() {
         SVProgressHUD.show()
     }
@@ -58,7 +59,9 @@ extension ContactListViewController: ContactView{
     }
 }
 
-extension ContactListViewController: UICollectionViewDelegateFlowLayout{
+// MARK: - Collection View Delegate Methods
+
+extension ContactListViewController: UICollectionViewDelegateFlowLayout {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return people.count
     }

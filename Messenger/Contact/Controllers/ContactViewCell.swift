@@ -19,6 +19,9 @@ class ContactViewCell: BaseCell {
             messageLabel.textColor = isHighlighted ? .white : .darkGray
         }
     }
+    
+    // MARK: - Cell Setup View Methods
+    
     override func setupViews() {
         backgroundColor = .white
         addSubview(profileImage)
@@ -36,8 +39,8 @@ class ContactViewCell: BaseCell {
         
         addConstraintWithFormat(format: "H:|-82-[v0]|", views: dividerLine)
         addConstraintWithFormat(format: "V:[v0(1)]|", views: dividerLine)
-        
     }
+    
     private func setupContainerView(){
         let containerView = UIView()
         addSubview(containerView)
@@ -56,6 +59,8 @@ class ContactViewCell: BaseCell {
         containerView.addConstraintWithFormat(format: "V:|[v0(20)]", views: timeLabel)
     }
     
+    // MARK: - Views
+    
     let profileImage: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -65,16 +70,18 @@ class ContactViewCell: BaseCell {
     }()
     
     let dividerLine: UIView = {
-       let  view = UIView()
+        let view = UIView()
         view.backgroundColor = UIColor(white: 0.5, alpha: 0.5)
         return view
     }()
+    
     let nameLabel: UILabel = {
         let label = UILabel()
         label.text = "Steve Jobs"
         label.font = label.font.withSize(18)
         return label
     }()
+    
     let timeLabel: UILabel = {
         let label = UILabel()
         label.text = "12:24 pm"
@@ -82,6 +89,7 @@ class ContactViewCell: BaseCell {
         label.font = label.font.withSize(16)
         return label
     }()
+    
     let messageLabel: UILabel = {
         let label = UILabel()
         label.text = "Message text and something long text"
@@ -92,9 +100,9 @@ class ContactViewCell: BaseCell {
 }
 
 extension UIView{
-    func addConstraintWithFormat(format: String, views: UIView...){
+    func addConstraintWithFormat(format: String, views: UIView...) {
         var viewsDictionary = [String: UIView]()
-        for (index, view) in views.enumerated(){
+        for (index, view) in views.enumerated() {
             let key = "v\(index)"
             viewsDictionary[key] = view
             view.translatesAutoresizingMaskIntoConstraints = false

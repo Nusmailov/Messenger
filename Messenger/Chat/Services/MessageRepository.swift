@@ -16,21 +16,24 @@ class MessageRepository {
         return appDelegate.persistentContainer.viewContext
     }
     
+    // MARK: - Message Core Data CRUD
     
-    static func createDBMessage(withText text: String, withDate date: Date, status: Int, friend: DBFriend, urlVideo: String? = nil, urlImage: String? = nil) throws{
+    static func createDBMessage(withText text: String, withDate date: Date, status: Int, friend: DBFriend, urlVideo: String? = nil, urlImage: String? = nil) throws {
         guard let managedContext = self.managedContext else { return }
         let entity = NSEntityDescription.entity(forEntityName: "DBMessage", in: managedContext)!
         let message = NSManagedObject(entity: entity, insertInto: managedContext)
+        
         message.setValue(text, forKeyPath: "text")
         message.setValue(friend, forKeyPath: "friend")
         message.setValue(date, forKeyPath: "date")
         message.setValue(status, forKeyPath: "type")
         message.setValue(urlVideo, forKey:"urlVideo")
         message.setValue(urlImage, forKey:"urlImage")
+        
         try managedContext.save()
     }
     
-    static func retrieveMessages(usingFilter filter: Filter = .none) -> [Message]{
+    static func retrieveMessages(usingFilter filter: Filter = .none) -> [Message] {
         guard let managedContext = self.managedContext else { return [] }
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "DBMessage")
         switch filter {
@@ -45,8 +48,7 @@ class MessageRepository {
         }
         do {
             return try managedContext.fetch(fetchRequest).map { Message(fromMessage: $0) }
-        }
-        catch{
+        } catch {
             return []
         }
     }

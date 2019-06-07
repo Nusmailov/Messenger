@@ -9,7 +9,7 @@
 import UIKit
 
 class ProgressBarView: UIView {
-   
+    //MARK: - File Field
     var bgPath: UIBezierPath!
     var shapeLayer: CAShapeLayer!
     var progressLayer: CAShapeLayer!
@@ -18,17 +18,23 @@ class ProgressBarView: UIView {
             progressLayer.strokeEnd = CGFloat(newValue)
         }
     }
+    
+    //MARK: - View lifecycle Methods
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         bgPath = UIBezierPath()
         self.simpleShape()
         isUserInteractionEnabled = true
     }
+    
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         bgPath = UIBezierPath()
         self.simpleShape()
     }
+    
+    // MARK: - Create View Methods
     
     func simpleShape() {
         bgPath = UIBezierPath(arcCenter: self.center, radius: 25, startAngle: -CGFloat.pi/2, endAngle: CGFloat.pi + CGFloat.pi/2, clockwise: true)
@@ -49,6 +55,8 @@ class ProgressBarView: UIView {
         self.layer.insertSublayer(progressLayer, at: 1)
     }
     
+    // MARK: - Buttion action methods in progress
+    
     lazy var actionButton: UIButton = {
         let button = UIButton()
         button.layer.cornerRadius = 25
@@ -58,7 +66,7 @@ class ProgressBarView: UIView {
         return button
     }()
     
-    @objc func actionLoader(){
+    @objc func actionLoader() {
         actionButton.setImage(UIImage(named: "dowload-icon"), for: .normal)
         actionButton.imageView?.snp.updateConstraints({ (update) in
             update.left.right.top.bottom.equalToSuperview()

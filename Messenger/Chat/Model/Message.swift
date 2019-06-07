@@ -34,21 +34,21 @@ enum MessageType: Int {
 class Message {
     var text: String?
     var date: Date
-//    var friend: Friend
-    var dbfriend: DBFriend
-    var status: MessageType
     var image: UIImage?
     var urlVideo: String?
     var urlImage: String?
+    //    var friend: Friend
+    var dbfriend: DBFriend
+    var status: MessageType
     
-    init(text: String, date: Date, status: Int, dbfriend: DBFriend){
+    init(text: String, date: Date, status: Int, dbfriend: DBFriend) {
         self.text = text
         self.date = date
         self.status = MessageType(rawValue: status) ?? .inComing
         self.dbfriend = dbfriend
     }
    
-    init(text: String, date: Date, status: MessageType, image: UIImage, dbfriend: DBFriend){
+    init(text: String, date: Date, status: MessageType, image: UIImage, dbfriend: DBFriend) {
         self.text = text
         self.date = date
         self.status = status

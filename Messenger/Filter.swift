@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 enum Filter {
     case ascendingOrder
     case descendingOrder

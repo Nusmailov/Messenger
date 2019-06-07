@@ -10,9 +10,14 @@ import UIKit
 import SnapKit
 
 class ChatViewCell: UITableViewCell {
-    var centerContraint:Constraint?
-    var leadingContraint:Constraint?
-    var trailingContraint:Constraint?
+    
+    //MARK: - File Fields
+    
+    private var centerContraint:Constraint?
+    private var leadingContraint:Constraint?
+    private var trailingContraint:Constraint?
+    
+    // MARK: - TableViewCell lifecycle methods
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -49,27 +54,29 @@ class ChatViewCell: UITableViewCell {
         }
     }
     
-    func setStatus(status: MessageType){
+    func setStatus(status: MessageType) {
         centerContraint?.deactivate()
         leadingContraint?.deactivate()
         trailingContraint?.deactivate()
-        
         bubbleView.backgroundColor = status.backgroundColor
         messageLabel.textColor = status.textColor
-        
-        if status == .inComing{
+        if status == .inComing {
             leadingContraint?.activate()
         }
-        else{
+        else {
             trailingContraint?.activate()
         }
     }
+    
+    // MARK: - File Views
+    
     let bubbleView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(white: 0.95, alpha: 1)
         view.layer.cornerRadius = 15
         return view
     }()
+    
     let profileImage: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -77,6 +84,7 @@ class ChatViewCell: UITableViewCell {
         imageView.layer.masksToBounds = true
         return imageView
     }()
+    
     let messageLabel: UILabel = {
         var text = UILabel()
         text.font = UIFont.systemFont(ofSize: 16.0)

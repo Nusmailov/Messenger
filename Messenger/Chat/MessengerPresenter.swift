@@ -9,20 +9,19 @@
 import Foundation
 
 
-class MessagePresenter{
+class MessagePresenter {
     
     public weak var view: MessageView?
     var messages = [Message]()
     
-    func getMessages(){
+    func getMessages() {
         view?.showLoading()
         view?.hideLoading()
         view?.showMessages(messages: messages)
     }
-    
 }
 
 
-protocol MessageView: BaseView{
+protocol MessageView: BaseView {
     func showMessages(messages: [Message])
 }

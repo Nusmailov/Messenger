@@ -89,10 +89,7 @@ extension PhotoGalleryViewController: UICollectionViewDataSource, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let asset = assets[indexPath.row]
         asset.getImage(ofSize: PHImageManagerMaximumSize) { [weak self] (image) in
-            let vc = PhotoResultViewController(withImage: image)
-//            vc.completionBlock = completionBlock
             self?.didTakePhoto!(image)
-//            self?.navigationController?.pushViewController(vc, animated: true)
         }
     }
     

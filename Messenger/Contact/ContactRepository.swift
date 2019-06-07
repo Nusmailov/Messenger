@@ -11,12 +11,12 @@ import CoreData
 import UIKit
 
 class ContactRepository {
-    
     private static  var managedContext: NSManagedObjectContext? {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return nil }
         return appDelegate.persistentContainer.viewContext
     }
     
+    // MARK: - Contact Core Data CRUD
     
     static func updateContact(withName name: String, to updatedName: String) throws {
         guard let managedContext = self.managedContext else { return }
@@ -42,15 +42,18 @@ class ContactRepository {
         guard let managedContext = self.managedContext else { return }
         let entity = NSEntityDescription.entity(forEntityName: "DBContact", in: managedContext)!
         let contact = NSManagedObject(entity: entity, insertInto: managedContext)
+        
         contact.setValue(name, forKeyPath: "name")
         contact.setValue(surname, forKeyPath: "surname")
         contact.setValue(phone, forKeyPath: "phone")
+        
         try managedContext.save()
     }
     
-    static func retrieveContacts(usingFilter filter: Filter = .none) -> [Contact]{
+    static func retrieveContacts(usingFilter filter: Filter = .none) -> [Contact] {
         guard let managedContext = self.managedContext else { return [] }
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "DBContact")
+        
         switch filter {
             case .ascendingOrder:
                 fetchRequest.sortDescriptors = [NSSortDescriptor.init(key: "name", ascending: true)]
@@ -61,10 +64,10 @@ class ContactRepository {
             case .none:
                 break
         }
+        
         do {
             return try managedContext.fetch(fetchRequest).map { Contact(fromContact: $0) }
-        }
-        catch{
+        } catch {
             return []
         }
     }

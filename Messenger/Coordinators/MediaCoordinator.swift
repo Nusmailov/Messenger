@@ -18,7 +18,7 @@ class MediaCoordinator {
     var navigationController: UINavigationController!
     var didPickMedia:((UIImage, String?)->())?
     
-    func start(type: MediaType){
+    func start(type: MediaType) {
         switch type {
             case .Gallery:
                 showGallery()

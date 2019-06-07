@@ -112,6 +112,17 @@
 			path = ClipAction;
 			sourceTree = "<group>";
 		};
+		F5357E4D22AA280800B6342F /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				F510D630227B129300FECC5D /* PhotoService.swift */,
+				F5357E4622A51E2800B6342F /* MessageRepository.swift */,
+				F5357E4822A5356700B6342F /* FriendRepository.swift */,
+				F510D632227C6DE100FECC5D /* Download.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		F59A9C1C224A5FD200AF61BF /* Contact */ = {
 			isa = PBXGroup;
 			children = (
@@ -126,14 +137,12 @@
 		F59A9C1D224A5FF000AF61BF /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				F5357E4D22AA280800B6342F /* Services */,
 				F5F149A72293FDEF008C2338 /* Controllers */,
 				F5F149AB2293FF79008C2338 /* Cells */,
 				F5F149A82293FDFF008C2338 /* Views */,
 				F5F149A62293FDDD008C2338 /* Model */,
 				F5D295C6225DADA300C47961 /* MessengerPresenter.swift */,
-				F5357E4622A51E2800B6342F /* MessageRepository.swift */,
-				F510D630227B129300FECC5D /* PhotoService.swift */,
-				F5357E4822A5356700B6342F /* FriendRepository.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -198,7 +207,6 @@
 				F5D53504224DE69600F3DF5F /* Friend.swift */,
 				F52B23B8227AFD7A00B34062 /* Photo.swift */,
 				F5D53502224DE65700F3DF5F /* Message.swift */,
-				F510D632227C6DE100FECC5D /* Download.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -239,8 +247,8 @@
 		F5F149AB2293FF79008C2338 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				F508D241225765480029F9E8 /* ChatSectionViewCell.swift */,
 				F519E63F224B94B700B2BD83 /* ChatViewCell.swift */,
+				F508D241225765480029F9E8 /* ChatSectionViewCell.swift */,
 				F5E1640B226DCDB600DD8653 /* PhotoMessageTableViewCell.swift */,
 			);
 			path = Cells;

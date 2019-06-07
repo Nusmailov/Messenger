@@ -11,12 +11,12 @@ import CoreData
 
 
 class Contact{
-    var name: String
-    var surname: String
-    var phone: String
-    var imageUrl: String?
+    public var name: String
+    public var surname: String
+    public var phone: String
+    public var imageUrl: String?
     
-    init(name: String, surname: String, phone:  String){
+    init(name: String, surname: String, phone:  String) {
         self.name = name
         self.surname = surname
         self.phone = phone
