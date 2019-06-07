@@ -9,12 +9,15 @@
 import UIKit
 
 class PhotoCollectionViewCell: UICollectionViewCell {
+    
+    // MARK: - Properties
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleToFill
         return imageView
     }()
     
+    // MARK: - LifeCycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         

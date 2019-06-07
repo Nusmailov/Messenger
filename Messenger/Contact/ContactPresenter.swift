@@ -12,6 +12,8 @@ import CoreData
 
 
 class ContactPresenter {
+    
+    // MARK: - Properties
     public weak var view: ContactView?
     private var filter: Filter = .none
     public var reloadData: (() -> ()) = { }
@@ -23,7 +25,6 @@ class ContactPresenter {
     }
     
     // MARK: - Contact Presenter Methods
-    
     func fetchContacts() {
         contacts = ContactRepository.retrieveContacts(usingFilter: filter)
     }
@@ -53,6 +54,7 @@ class ContactPresenter {
     }
 }
 
+// MARK: - Protocol Methods
 protocol ContactView: BaseView {
     func showContact(contacts: [Contact])
 }

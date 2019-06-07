@@ -11,8 +11,8 @@ import AVFoundation
 
 class CameraViewController: UIViewController {
     
+    // MARK: - Properties
     var captureSession = AVCaptureSession()
-    
     var backCamera: AVCaptureDevice?
     var frontCamera: AVCaptureDevice?
     var currentCamera: AVCaptureDevice?
@@ -20,9 +20,9 @@ class CameraViewController: UIViewController {
     var cameraPreviewLayer: AVCaptureVideoPreviewLayer?
     
     var isConfigured: Bool = false
-    
     var didCapturePhoto: ((UIImage)->())?
     
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Camera"

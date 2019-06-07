@@ -12,7 +12,6 @@ import SnapKit
 class ChatSectionViewCell: UICollectionReusableView {
     
     // MARK: - TableViewCell lifecycle methods
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(mainView)
@@ -31,8 +30,7 @@ class ChatSectionViewCell: UICollectionReusableView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - File Views
-    
+    // MARK: - Views
     let mainView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.gray.withAlphaComponent(0.3)

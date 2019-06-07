@@ -11,6 +11,7 @@ import UIKit
 
 class FriendRepository {
     
+    // MARK: - Properties
     private static var managedContext: NSManagedObjectContext? {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return nil }
         return appDelegate.persistentContainer.viewContext

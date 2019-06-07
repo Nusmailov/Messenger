@@ -10,6 +10,7 @@ import UIKit
 import SnapKit
 import AVKit
 
+// MARK: - AnimationProtocol
 protocol StartStopAnimatingDelegate: class {
     func didTapStopButton()
     func didTapStartButton()
@@ -18,8 +19,7 @@ protocol StartStopAnimatingDelegate: class {
 
 class PhotoMessageTableViewCell: UITableViewCell {
     
-    //MARK: - File Fields
-    
+    // MARK: - Properties
     private var stateAnimating:Bool!
     private var starter:Bool = false
     lazy var blurView = UIVisualEffectView(effect:  UIBlurEffect(style: .light))
@@ -40,7 +40,6 @@ class PhotoMessageTableViewCell: UITableViewCell {
     public var delegate:StartStopAnimatingDelegate?
     
     // MARK: - Cell Cycle methods
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
@@ -50,8 +49,7 @@ class PhotoMessageTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - File Views
-    
+    // MARK: - Setup Views
     fileprivate func setupViews() {
         addSubview(bubbleView)
         
@@ -113,7 +111,6 @@ class PhotoMessageTableViewCell: UITableViewCell {
     }
     
     // MARK: - Loading Process Action Methods
-    
     func setStatus(status: MessageType) {
         centerContraint?.deactivate()
         leadingContraint?.deactivate()
@@ -191,8 +188,7 @@ class PhotoMessageTableViewCell: UITableViewCell {
         }
     }
     
-    // MARK: - File Views
-    
+    // MARK: - Views
     let bubbleView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(white: 0.95, alpha: 1)

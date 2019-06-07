@@ -11,18 +11,16 @@ import SVProgressHUD
 import SDWebImage
 import CoreData
 
-
-
 class ContactListViewController: UICollectionViewController {
-    fileprivate var cellid = "cellId"
     
+    // MARK: - Properties
+    fileprivate var cellid = "cellId"
     var contacts = [Contact]()
     let contactPresenter = ContactPresenter()
     var people: [Contact] = []
     var photoService: PhotoService?
     
-    // MARK: - View controller lifecycle methods
-    
+    // MARK: - Life cycle
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = false
@@ -41,7 +39,6 @@ class ContactListViewController: UICollectionViewController {
 }
 
 // MARK: - ContactView Extension Views
-
 extension ContactListViewController: ContactView {
     func showLoading() {
         SVProgressHUD.show()
@@ -58,8 +55,7 @@ extension ContactListViewController: ContactView {
     }
 }
 
-// MARK: - Collection View Delegate Methods
-
+// MARK: - CollectionView Delegate Methods
 extension ContactListViewController: UICollectionViewDelegateFlowLayout {
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

@@ -14,12 +14,14 @@ protocol SendingPhotoDelegate {
 
 class PhotoResultViewController: UIViewController{
     
+    // MARK: - Properties
     var heightOfTextContainer = 70
     var bottomConstraint: NSLayoutConstraint?
     let enterMessage = "Enter message"
     var delegate: SendingPhotoDelegate?
     var sendData:((UIImage, String?)->())?
     
+    // MARK: - Life Cycle
     init(withImage image: UIImage) {
         super.init(nibName: nil, bundle: nil)
         imageView.image = image
@@ -122,6 +124,8 @@ class PhotoResultViewController: UIViewController{
             make.height.width.equalTo(30)
         }
     }
+    
+    // MARK: - Views
     let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit

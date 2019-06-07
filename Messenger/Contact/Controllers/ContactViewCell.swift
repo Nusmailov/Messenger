@@ -11,6 +11,7 @@ import CoreData
 import SnapKit
 
 class ContactViewCell: BaseCell {
+    // MARK: - Properties
     override var isHighlighted: Bool {
         didSet {
             backgroundColor = isHighlighted ? UIColor(red: 0, green: 134/255, blue: 249/255, alpha: 1) : .white
@@ -21,7 +22,6 @@ class ContactViewCell: BaseCell {
     }
     
     // MARK: - Cell Setup View Methods
-    
     override func setupViews() {
         backgroundColor = .white
         addSubview(profileImage)
@@ -60,7 +60,6 @@ class ContactViewCell: BaseCell {
     }
     
     // MARK: - Views
-    
     let profileImage: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill

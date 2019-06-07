@@ -16,8 +16,7 @@ import AVFoundation
 
 class ChatTableViewController: UIViewController {
     
-    //MARK: - File Fields
-    
+    // MARK: - Properties
     fileprivate let cellId = "cellId"
     fileprivate let chatCellId = "chatCellId"
     fileprivate let videoCell = "videoCell"
@@ -45,7 +44,6 @@ class ChatTableViewController: UIViewController {
     }
     
     // MARK: - View controller lifecycle methods
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: animated)
@@ -65,7 +63,6 @@ class ChatTableViewController: UIViewController {
     }
     
     // MARK: - Button Action methods
-    
     @objc func showActionSheet() {
         let actionSheet = UIAlertController(title: "Photo", message: "", preferredStyle: .actionSheet)
         
@@ -172,7 +169,6 @@ class ChatTableViewController: UIViewController {
     }
     
     //MARK: - SetupViews
-    
     fileprivate func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
@@ -228,8 +224,7 @@ class ChatTableViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
-    //MARK: - File Views
-    
+    //MARK: - Views
     let textContainer: UIView = {
         let view = UIView()
         view.backgroundColor = .white
@@ -272,7 +267,6 @@ class ChatTableViewController: UIViewController {
 }
 
 // MARK: - TableView Delegate
-
 extension ChatTableViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -316,10 +310,9 @@ extension ChatTableViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
-    
 }
-// MARK: - Presenter Realization
 
+// MARK: - Presenter Methods
 extension ChatTableViewController: DownloaderDelegate {
     func didFinish(path: String) {
         DispatchQueue.main.async {
@@ -361,7 +354,6 @@ extension ChatTableViewController: DownloaderDelegate {
 }
 
 // MARK: Start and Stop Animating Delegates
-
 extension ChatTableViewController: StartStopAnimatingDelegate {
     
     func didTapStartVideo() {

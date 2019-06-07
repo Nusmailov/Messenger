@@ -10,8 +10,7 @@ import UIKit
 
 class ProgressBarView: UIView {
     
-    //MARK: - File Field
-    
+    // MARK: - Properties
     var bgPath: UIBezierPath!
     var shapeLayer: CAShapeLayer!
     var progressLayer: CAShapeLayer!
@@ -22,7 +21,6 @@ class ProgressBarView: UIView {
     }
     
     //MARK: - View lifecycle Methods
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         bgPath = UIBezierPath()
@@ -37,7 +35,6 @@ class ProgressBarView: UIView {
     }
     
     // MARK: - Create View Methods
-    
     func simpleShape() {
         bgPath = UIBezierPath(arcCenter: self.center, radius: 25, startAngle: -CGFloat.pi/2, endAngle: CGFloat.pi + CGFloat.pi/2, clockwise: true)
         shapeLayer = CAShapeLayer()
@@ -58,7 +55,6 @@ class ProgressBarView: UIView {
     }
     
     // MARK: - Buttion action methods in progress
-    
     lazy var actionButton: UIButton = {
         let button = UIButton()
         button.layer.cornerRadius = 25

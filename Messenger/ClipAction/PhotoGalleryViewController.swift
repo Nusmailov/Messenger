@@ -23,6 +23,7 @@ class PhotoGalleryViewController: UIViewController {
         return collectionView
     }()
     
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Gallery"
@@ -38,6 +39,7 @@ class PhotoGalleryViewController: UIViewController {
         fetchImages()
     }
     
+    // MARK: - Methods
     @objc private func didTapCancelButton(_ sender: UIBarButtonItem) {
         dismiss(animated: true)
     }
@@ -69,6 +71,7 @@ class PhotoGalleryViewController: UIViewController {
     }
 }
 
+// MARK: - CollectionView Delegate methods
 extension PhotoGalleryViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return assets.count

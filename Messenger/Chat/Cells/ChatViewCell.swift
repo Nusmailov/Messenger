@@ -11,14 +11,12 @@ import SnapKit
 
 class ChatViewCell: UITableViewCell {
     
-    //MARK: - File Fields
-    
+    // MARK: - Properties
     private var centerContraint:Constraint?
     private var leadingContraint:Constraint?
     private var trailingContraint:Constraint?
     
     // MARK: - TableViewCell lifecycle methods
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
@@ -70,7 +68,6 @@ class ChatViewCell: UITableViewCell {
     }
     
     // MARK: - File Views
-    
     let bubbleView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(white: 0.95, alpha: 1)

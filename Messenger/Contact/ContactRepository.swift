@@ -11,13 +11,14 @@ import CoreData
 import UIKit
 
 class ContactRepository {
+    
+    // MARK: - Properties
     private static  var managedContext: NSManagedObjectContext? {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return nil }
         return appDelegate.persistentContainer.viewContext
     }
     
     // MARK: - Contact Core Data CRUD
-    
     static func updateContact(withName name: String, to updatedName: String) throws {
         guard let managedContext = self.managedContext else { return }
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "DBContact")

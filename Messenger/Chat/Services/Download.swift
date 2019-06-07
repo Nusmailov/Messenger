@@ -16,11 +16,12 @@ protocol DownloaderDelegate: class {
 }
 
 class Downloader: NSObject {
+    
+    // MARK: - Properties
     weak var delegate: DownloaderDelegate?
     var downloadTask = URLSessionDownloadTask()
     
     //MARK: -  Download Methods
-    
     func download() {
         let session = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
         // MARK: - Image default URLS
@@ -39,10 +40,8 @@ class Downloader: NSObject {
     
 }
 
+// MARK: - URLsession Delegate Methods
 extension Downloader: URLSessionDownloadDelegate {
-    
-    // MARK: - URLsession Delegate Methods
-    
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         let imageData = try? Data(contentsOf: location)
         
@@ -68,5 +67,4 @@ extension Downloader: URLSessionDownloadDelegate {
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
         delegate?.progress(Float(totalBytesWritten * 100 / totalBytesExpectedToWrite))
     }
-    
 }
