@@ -16,7 +16,7 @@ enum MediaType{
 
 class MediaCoordinator {
     var navigationController: UINavigationController!
-    var didPickMedia:((UIImage, String?)->())?
+    var didPickMedia:((UIImage, String?) -> ())?
     
     func start(type: MediaType) {
         switch type {

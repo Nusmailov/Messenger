@@ -21,6 +21,7 @@ enum MessageType: Int {
             return .blue
         }
     }
+    
     var textColor: UIColor {
         switch self {
         case .inComing:

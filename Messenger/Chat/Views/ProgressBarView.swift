@@ -9,7 +9,9 @@
 import UIKit
 
 class ProgressBarView: UIView {
+    
     //MARK: - File Field
+    
     var bgPath: UIBezierPath!
     var shapeLayer: CAShapeLayer!
     var progressLayer: CAShapeLayer!

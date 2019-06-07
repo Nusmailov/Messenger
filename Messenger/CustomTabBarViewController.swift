@@ -21,7 +21,7 @@ class CustomTabBarViewController: UITabBarController {
         viewControllers = [chatNavController,createNavBarController(title: "Calls", imageName: "call"), createNavBarController(title: "History", imageName: "history"),createNavBarController(title: "User", imageName: "user")]
     }
     
-    private func createNavBarController(title: String, imageName: String)->UINavigationController{
+    private func createNavBarController(title: String, imageName: String) -> UINavigationController {
         let vc = UIViewController()
         let navContoller = UINavigationController(rootViewController: vc)
         navContoller.tabBarItem.image = UIImage(named: imageName)

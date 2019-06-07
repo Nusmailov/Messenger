@@ -78,7 +78,7 @@ class ChatTableViewController: UIViewController {
                 let mark = Friend()
                 mark.name = "Mark Zuckerberg"
                 let message = Message(text: text ?? "", date: Date.init(timeIntervalSinceNow: 86400), status: .outGoing, image: UIImage(), dbfriend: DBFriend())
-                do{
+                do {
                     self.messages = [message] + self.messages
                     self.tableView.reloadData()
                     let index = IndexPath(row: 0, section: 0)
@@ -98,7 +98,7 @@ class ChatTableViewController: UIViewController {
                 let mark = Friend()
                 mark.name = "Mark Zuckerberg"
                 let message = Message(text: text ?? "", date: Date.init(timeIntervalSinceNow: 86400), status: .outGoing, image: UIImage(), dbfriend: DBFriend())
-                do{
+                do {
                     self.messages = [message] + self.messages
                     self.tableView.reloadData()
                 }
@@ -109,7 +109,7 @@ class ChatTableViewController: UIViewController {
         
         let addImage = UIAlertAction(title: "Add Image", style: .default) { (action) in
             let message = Message(text: self.textView.text ?? "", date: Date.init(timeIntervalSinceNow: 86400), status: .outGoing, image: UIImage(), dbfriend: DBFriend())
-            do{
+            do {
                 self.messages = [message] + self.messages
                 self.tableView.reloadData()
                 self.downloader.download()

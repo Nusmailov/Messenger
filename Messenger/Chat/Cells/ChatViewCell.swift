@@ -19,13 +19,13 @@ class ChatViewCell: UITableViewCell {
     
     // MARK: - TableViewCell lifecycle methods
     
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
     }
     
     func setupViews() {
@@ -58,6 +58,7 @@ class ChatViewCell: UITableViewCell {
         centerContraint?.deactivate()
         leadingContraint?.deactivate()
         trailingContraint?.deactivate()
+        
         bubbleView.backgroundColor = status.backgroundColor
         messageLabel.textColor = status.textColor
         if status == .inComing {

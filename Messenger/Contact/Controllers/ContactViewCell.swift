@@ -11,8 +11,8 @@ import CoreData
 import SnapKit
 
 class ContactViewCell: BaseCell {
-    override var isHighlighted: Bool{
-        didSet{
+    override var isHighlighted: Bool {
+        didSet {
             backgroundColor = isHighlighted ? UIColor(red: 0, green: 134/255, blue: 249/255, alpha: 1) : .white
             nameLabel.textColor = isHighlighted ? .white : .black
             timeLabel.textColor = isHighlighted ? .white : .black
@@ -41,7 +41,7 @@ class ContactViewCell: BaseCell {
         addConstraintWithFormat(format: "V:[v0(1)]|", views: dividerLine)
     }
     
-    private func setupContainerView(){
+    private func setupContainerView() {
         let containerView = UIView()
         addSubview(containerView)
         addConstraintWithFormat(format: "H:|-90-[v0]|", views: containerView)

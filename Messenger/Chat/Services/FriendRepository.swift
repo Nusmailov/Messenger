@@ -18,26 +18,6 @@ class FriendRepository {
     
     // MARK: - Friend Core Data CRUD
     
-    static func updateFriend(withName name: String, to newName: String) throws {
-        guard let managedContext = self.managedContext else { return }
-        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "DBFriend")
-        fetchRequest.predicate = NSPredicate(format: "name = %@", name)
-        let fetchResult = try managedContext.fetch(fetchRequest)
-        guard let message = fetchResult.first else { return }
-        message.setValue(newName, forKey: "name")
-        try managedContext.save()
-    }
-    
-    static func deleteFriend(withName name: String) throws {
-        guard let managedContext = self.managedContext else { return }
-        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "DBFriend")
-        fetchRequest.predicate = NSPredicate(format: "name = %@", name)
-        let fetchResult = try managedContext.fetch(fetchRequest)
-        guard let friend = fetchResult.first else { return }
-        managedContext.delete(friend)
-        try managedContext.save()
-    }
-    
     static func createFriend(withName name: String, withProfileImage profileImage: String) throws {
         guard let managedContext = self.managedContext else { return }
         let entity = NSEntityDescription.entity(forEntityName: "DBFriend", in: managedContext)!
@@ -90,4 +70,25 @@ class FriendRepository {
             return []
         }
     }
+    
+    static func updateFriend(withName name: String, to newName: String) throws {
+        guard let managedContext = self.managedContext else { return }
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "DBFriend")
+        fetchRequest.predicate = NSPredicate(format: "name = %@", name)
+        let fetchResult = try managedContext.fetch(fetchRequest)
+        guard let message = fetchResult.first else { return }
+        message.setValue(newName, forKey: "name")
+        try managedContext.save()
+    }
+    
+    static func deleteFriend(withName name: String) throws {
+        guard let managedContext = self.managedContext else { return }
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "DBFriend")
+        fetchRequest.predicate = NSPredicate(format: "name = %@", name)
+        let fetchResult = try managedContext.fetch(fetchRequest)
+        guard let friend = fetchResult.first else { return }
+        managedContext.delete(friend)
+        try managedContext.save()
+    }
+    
 }

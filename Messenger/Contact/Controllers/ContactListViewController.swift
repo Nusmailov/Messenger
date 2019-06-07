@@ -26,7 +26,6 @@ class ContactListViewController: UICollectionViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = false
-        
     }
    
     override func viewDidLoad() {
@@ -62,6 +61,7 @@ extension ContactListViewController: ContactView {
 // MARK: - Collection View Delegate Methods
 
 extension ContactListViewController: UICollectionViewDelegateFlowLayout {
+    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return people.count
     }
