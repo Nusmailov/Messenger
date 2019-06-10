@@ -21,6 +21,43 @@ class ContactViewCell: BaseCell {
             messageLabel.textColor = isHighlighted ? .white : .darkGray
         }
     }
+    // MARK: - Views
+    let profileImage: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.layer.cornerRadius = 34
+        imageView.layer.masksToBounds =  true
+        return imageView
+    }()
+    
+    let dividerLine: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(white: 0.5, alpha: 0.5)
+        return view
+    }()
+    
+    let nameLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Steve Jobs"
+        label.font = label.font.withSize(18)
+        return label
+    }()
+    
+    let timeLabel: UILabel = {
+        let label = UILabel()
+        label.text = "12:24 pm"
+        label.textAlignment = .right
+        label.font = label.font.withSize(16)
+        return label
+    }()
+    
+    let messageLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Message text and something long text"
+        label.font = label.font.withSize(14)
+        label.textColor = .darkGray
+        return label
+    }()
     
     // MARK: - Cell Setup View Methods
     override func setupViews() {
@@ -60,43 +97,6 @@ class ContactViewCell: BaseCell {
         containerView.addConstraintWithFormat(format: "V:|[v0(20)]", views: timeLabel)
     }
     
-    // MARK: - Views
-    let profileImage: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        imageView.layer.cornerRadius = 34
-        imageView.layer.masksToBounds =  true
-        return imageView
-    }()
-    
-    let dividerLine: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor(white: 0.5, alpha: 0.5)
-        return view
-    }()
-    
-    let nameLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Steve Jobs"
-        label.font = label.font.withSize(18)
-        return label
-    }()
-    
-    let timeLabel: UILabel = {
-        let label = UILabel()
-        label.text = "12:24 pm"
-        label.textAlignment = .right
-        label.font = label.font.withSize(16)
-        return label
-    }()
-    
-    let messageLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Message text and something long text"
-        label.font = label.font.withSize(14)
-        label.textColor = .darkGray
-        return label
-    }()
 }
 
 extension UIView{

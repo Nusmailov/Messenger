@@ -41,13 +41,16 @@ extension ContactListViewController: ContactView {
     func showLoading() {
 //        SVProgressHUD.show()
     }
+    
     func showContact(contacts: [Contact]) {
         self.contacts = contacts
         collectionView.reloadData()
     }
+    
     func hideLoading() {
 //        SVProgressHUD.dismiss()
     }
+    
     func showError(errorMessage: String) {
         print(errorMessage)
     }

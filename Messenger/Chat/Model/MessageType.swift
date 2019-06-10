@@ -15,19 +15,19 @@ enum MessageType: Int {
     
     var backgroundColor: UIColor {
         switch self {
-        case .inComing:
-            return UIColor(white: 0.9, alpha: 1)
-        case .outGoing:
-            return .blue
+            case .inComing:
+                return UIColor(white: 0.9, alpha: 1)
+            case .outGoing:
+                return .blue
         }
     }
     
     var textColor: UIColor {
         switch self {
-        case .inComing:
-            return .black
-        case .outGoing:
-            return .white
+            case .inComing:
+                return .black
+            case .outGoing:
+                return .white
         }
     }
     

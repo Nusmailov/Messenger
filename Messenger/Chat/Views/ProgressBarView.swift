@@ -20,7 +20,7 @@ class ProgressBarView: UIView {
         }
     }
     
-    //MARK: - View lifecycle Methods
+    //MARK: - Lifecycle Methods
     override init(frame: CGRect) {
         super.init(frame: frame)
         bgPath = UIBezierPath()

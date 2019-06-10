@@ -16,8 +16,7 @@ class ChatViewCell: UITableViewCell {
     private var leadingContraint:Constraint?
     private var trailingContraint:Constraint?
     
-    // MARK: - File Views
-    
+    // MARK: - Views
     let bubbleView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(white: 0.95, alpha: 1)
@@ -53,6 +52,7 @@ class ChatViewCell: UITableViewCell {
         super.init(coder: aDecoder)
     }
     
+    // MARK: - Methods
     func setupViews() {
         addSubview(bubbleView)
         bubbleView.addSubview(messageLabel)

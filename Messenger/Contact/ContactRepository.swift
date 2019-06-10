@@ -67,7 +67,12 @@ class ContactRepository {
         }
         
         do {
-            return try managedContext.fetch(fetchRequest).map { Contact(fromContact: $0) }
+            return try managedContext.fetch(fetchRequest).map {
+                let name = ($0.value(forKey: "name") as? String) ?? "NoName"
+                let surname = ($0.value(forKey: "surname") as? String) ?? "NoSurname"
+                let phone = ($0.value(forKey: "phone") as? String) ??  "NoPhone"
+                return Contact(name: name, surname: surname, phone: phone)
+            }
         } catch {
             return []
         }

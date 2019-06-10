@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-enum MediaType{
+enum MediaType {
     case Gallery
     case Camera
 }
@@ -29,24 +29,24 @@ class MediaCoordinator {
     
     func showGallery() {
         let vc = PhotoGalleryViewController()
-        vc.didTakePhoto = {(image) in
-            self.showResultVC(withImage: image)
+        vc.didTakePhoto = {[weak self](image) in
+            self?.showResultVC(withImage: image)
         }
         navigationController = UINavigationController(rootViewController: vc)
     }
     
     func showCamera() {
         let vc = CameraViewController()
-        vc.didCapturePhoto = {(image) in
-            self.showResultVC(withImage: image)
+        vc.didCapturePhoto = {[weak self](image) in
+            self?.showResultVC(withImage: image)
         }
         navigationController = UINavigationController(rootViewController: vc)
     }
     
     func showResultVC(withImage image: UIImage) {
         let vc = PhotoResultViewController(withImage: image)
-        vc.sendData = { (image, text) in
-            self.didPickMedia?(image, text)
+        vc.sendData = {[weak self] (image, text) in
+            self?.didPickMedia?(image, text)
         }
         navigationController.pushViewController(vc, animated: true)
     }

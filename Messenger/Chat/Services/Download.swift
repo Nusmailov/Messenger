@@ -49,7 +49,7 @@ extension Downloader: URLSessionDownloadDelegate {
             delegate?.didFinish(image: image)
         }
         else {
-            do{
+            do {
                 let downloadedData = try Data(contentsOf: location)
                 DispatchQueue.main.async(execute: {
                     let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first! as NSString
