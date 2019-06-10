@@ -46,7 +46,11 @@ class FriendRepository {
         }
         
         do {
-            return try managedContext.fetch(fetchRequest).map { Friend(withFriend: $0) }
+            return try managedContext.fetch(fetchRequest).map {
+                let name = ($0.value(forKey: "name") as? String) ?? ""
+                let profileImage = ($0.value(forKey: "profileImage")  as? String) ?? ""
+                return Friend(name: name, profileImage: profileImage)
+            }
         } catch {
             return []
         }

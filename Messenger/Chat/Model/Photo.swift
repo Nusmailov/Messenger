@@ -6,7 +6,6 @@
 //  Copyright © 2019 Nurzhigit Smailov. All rights reserved.
 //
 import Foundation
-import SwiftyJSON
 
 class Photos: Decodable {
     var photos: PhotoRegister
@@ -21,7 +20,6 @@ class Photo: Decodable {
     var isfamily: Int
     var isfriend : Int
     var ispublic : Int
-    
     var owner : String
     var secret : String
     var server : String

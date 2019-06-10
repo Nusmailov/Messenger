@@ -16,6 +16,33 @@ class ChatViewCell: UITableViewCell {
     private var leadingContraint:Constraint?
     private var trailingContraint:Constraint?
     
+    // MARK: - File Views
+    
+    let bubbleView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(white: 0.95, alpha: 1)
+        view.layer.cornerRadius = 15
+        return view
+    }()
+    
+    let profileImage: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.layer.cornerRadius = 15
+        imageView.layer.masksToBounds = true
+        return imageView
+    }()
+    
+    let messageLabel: UILabel = {
+        var text = UILabel()
+        text.font = UIFont.systemFont(ofSize: 16.0)
+        text.text = "Some messages are here"
+        text.backgroundColor = .clear
+        text.numberOfLines = 0
+        text.sizeToFit()
+        return text
+    }()
+    
     // MARK: - TableViewCell lifecycle methods
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -66,30 +93,4 @@ class ChatViewCell: UITableViewCell {
             trailingContraint?.activate()
         }
     }
-    
-    // MARK: - File Views
-    let bubbleView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor(white: 0.95, alpha: 1)
-        view.layer.cornerRadius = 15
-        return view
-    }()
-    
-    let profileImage: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
-        imageView.layer.cornerRadius = 15
-        imageView.layer.masksToBounds = true
-        return imageView
-    }()
-    
-    let messageLabel: UILabel = {
-        var text = UILabel()
-        text.font = UIFont.systemFont(ofSize: 16.0)
-        text.text = "Some messages are here"
-        text.backgroundColor = .clear
-        text.numberOfLines = 0
-        text.sizeToFit()
-        return text
-    }()
 }

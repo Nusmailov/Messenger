@@ -11,7 +11,7 @@ import Foundation
 
 class MessagePresenter {
     // MARK: - Properties
-    public weak var view: MessageView?
+    weak var view: MessageView?
     var messages = [Message]()
     
     func getMessages() {

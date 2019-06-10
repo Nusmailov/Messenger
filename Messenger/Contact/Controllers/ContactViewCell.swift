@@ -11,6 +11,7 @@ import CoreData
 import SnapKit
 
 class ContactViewCell: BaseCell {
+    
     // MARK: - Properties
     override var isHighlighted: Bool {
         didSet {

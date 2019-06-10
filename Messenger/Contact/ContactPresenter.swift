@@ -9,15 +9,13 @@
 import Foundation
 import CoreData
 
-
-
 class ContactPresenter {
     
     // MARK: - Properties
     public weak var view: ContactView?
     private var filter: Filter = .none
-    public var reloadData: (() -> ()) = { }
-    public var didFail: ((_ message: String) -> ()) = { _ in }
+    private var reloadData: (() -> ()) = { }
+    private var didFail: ((_ message: String) -> ()) = { _ in }
     private var contacts: [Contact] = [] {
         didSet {
             reloadData()

@@ -8,9 +8,6 @@
 
 import UIKit
 import SnapKit
-import SVProgressHUD
-import SDWebImage
-import CoreData
 import AVKit
 import AVFoundation
 
@@ -43,6 +40,47 @@ class ChatTableViewController: UIViewController {
         }
     }
     
+    //MARK: - Views
+    let textContainer: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        return view
+    }()
+    
+    let clipButton: UIButton = {
+        let  button = UIButton()
+        button.setImage(UIImage(named: "clip1"), for: .normal)
+        button.setTitle("", for: .normal)
+        button.layer.cornerRadius = 10
+        button.addTarget(self, action: #selector(showActionSheet), for: .touchUpInside)
+        return button
+    }()
+    
+    let sendButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Send", for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.layer.cornerRadius = 10
+        button.layer.masksToBounds = true
+        button.layer.borderColor = UIColor.lightGray.cgColor
+        button.layer.borderWidth = 0.2
+        button.addTarget(self, action: #selector(addMessage), for: .touchUpInside)
+        return button
+    }()
+    
+    let textView: UITextView = {
+        let view = UITextView()
+        view.text = "Enter message"
+        view.textColor = .lightGray
+        view.layer.cornerRadius = 10
+        view.layer.masksToBounds = true
+        view.font = UIFont(name: "verdana", size: 13.0)
+        view.backgroundColor = .white
+        view.layer.borderColor = UIColor.lightGray.cgColor
+        view.layer.borderWidth = 0.4
+        return view
+    }()
+    
     // MARK: - View controller lifecycle methods
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -68,57 +106,61 @@ class ChatTableViewController: UIViewController {
         
         let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
-        let photo = UIAlertAction(title: "Photo & Video Library", style: .default){ action in
+        let photo = UIAlertAction(title: "Photo & Video Library", style: .default){ [weak self] action in
             let coordinator = MediaCoordinator()
             coordinator.start(type: .Gallery)
             coordinator.didPickMedia = { (image,text) in
                 let mark = Friend()
                 mark.name = "Mark Zuckerberg"
-                let message = Message(text: text ?? "", date: Date.init(timeIntervalSinceNow: 86400), status: .outGoing, image: UIImage(), dbfriend: DBFriend())
+                let message = Message(text: text ?? "", date: Date.init(timeIntervalSinceNow: 86400), status: .outGoing, image: UIImage(), dbFriend: DBFriend())
                 do {
-                    self.messages = [message] + self.messages
-                    self.tableView.reloadData()
+                    guard let unwrappedMessages = self?.messages else { return }
+                    self?.messages = [message] + unwrappedMessages
+                    self?.tableView.reloadData()
                     let index = IndexPath(row: 0, section: 0)
-                    if let cell = self.tableView.cellForRow(at: index) as? PhotoMessageTableViewCell {
+                    if let cell = self?.tableView.cellForRow(at: index) as? PhotoMessageTableViewCell {
                         cell.startAnimatingIfNeeded()
                     }
                 }
                 coordinator.navigationController.dismiss(animated: true)
             }
-            self.present(coordinator.navigationController, animated: true)
+            self?.present(coordinator.navigationController, animated: true)
         }
         
-        let camera = UIAlertAction(title: "Camera", style: .default) { (action) in
+        let camera = UIAlertAction(title: "Camera", style: .default) {[weak self] (action) in
             let coordinator = MediaCoordinator()
             coordinator.start(type: .Camera)
             coordinator.didPickMedia = { (image, text) in
                 let mark = Friend()
                 mark.name = "Mark Zuckerberg"
-                let message = Message(text: text ?? "", date: Date.init(timeIntervalSinceNow: 86400), status: .outGoing, image: UIImage(), dbfriend: DBFriend())
+                let message = Message(text: text ?? "", date: Date.init(timeIntervalSinceNow: 86400), status: .outGoing, image: UIImage(), dbFriend: DBFriend())
                 do {
-                    self.messages = [message] + self.messages
-                    self.tableView.reloadData()
+                    guard let unwrappedMessages = self?.messages else { return }
+                    self?.messages = [message] + unwrappedMessages
+                    self?.tableView.reloadData()
                 }
                 coordinator.navigationController.dismiss(animated: true)
             }
-            self.present(coordinator.navigationController, animated: true)
+            self?.present(coordinator.navigationController, animated: true)
         }
         
-        let addImage = UIAlertAction(title: "Add Image", style: .default) { (action) in
-            let message = Message(text: self.textView.text ?? "", date: Date.init(timeIntervalSinceNow: 86400), status: .outGoing, image: UIImage(), dbfriend: DBFriend())
+        let addImage = UIAlertAction(title: "Add Image", style: .default) { [weak self] (action) in
+            let message = Message(text: self?.textView.text ?? "", date: Date.init(timeIntervalSinceNow: 86400), status: .outGoing, image: UIImage(), dbFriend: DBFriend())
             do {
-                self.messages = [message] + self.messages
-                self.tableView.reloadData()
-                self.downloader.download()
+                guard let unwrappedMessages = self?.messages else { return }
+                self?.messages = [message] + unwrappedMessages
+                self?.tableView.reloadData()
+                self?.downloader.download()
             }
         }
         
-        let addVideo = UIAlertAction(title: "Add Video", style: .default) { (action) in
-            let message = Message(text: self.textView.text ?? "", date: Date.init(timeIntervalSinceNow: 86400), status: .outGoing, image: UIImage(), dbfriend: DBFriend())
+        let addVideo = UIAlertAction(title: "Add Video", style: .default) { [weak self] (action) in
+            let message = Message(text: self?.textView.text ?? "", date: Date.init(timeIntervalSinceNow: 86400), status: .outGoing, image: UIImage(), dbFriend: DBFriend())
             do{
-                self.messages = [message]  + self.messages
-                self.tableView.reloadData()
-                self.downloader.download()
+                guard let unwrappedMessages = self?.messages else { return }
+                self?.messages = [message]  + unwrappedMessages
+                self?.tableView.reloadData()
+                self?.downloader.download()
             }
         }
         
@@ -134,7 +176,7 @@ class ChatTableViewController: UIViewController {
     @objc func addMessage() {
         let mark = Friend()
         mark.name = "Mark Zuckerberg"
-        let message = Message(text: textView.text ?? "", date: Date.init(timeIntervalSinceNow: 86400), status: .outGoing, image: UIImage(), dbfriend: DBFriend())
+        let message = Message(text: textView.text ?? "", date: Date.init(timeIntervalSinceNow: 86400), status: .outGoing, image: UIImage(), dbFriend: DBFriend())
         
         messages = [message] + messages
         tableView.reloadData()
@@ -197,6 +239,7 @@ class ChatTableViewController: UIViewController {
         textContainer.addSubview(clipButton)
         textContainer.addSubview(textView)
         textContainer.addSubview(sendButton)
+        
         textView.snp.makeConstraints { (make) -> Void in
             make.left.equalTo(textContainer).offset(45)
             make.top.equalTo(textContainer).offset(5)
@@ -224,46 +267,6 @@ class ChatTableViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
-    //MARK: - Views
-    let textContainer: UIView = {
-        let view = UIView()
-        view.backgroundColor = .white
-        return view
-    }()
-    
-    let clipButton: UIButton = {
-        let  button = UIButton()
-        button.setImage(UIImage(named: "clip1"), for: .normal)
-        button.setTitle("", for: .normal)
-        button.layer.cornerRadius = 10
-        button.addTarget(self, action: #selector(showActionSheet), for: .touchUpInside)
-        return button
-    }()
-    
-    let sendButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("Send", for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        button.layer.cornerRadius = 10
-        button.layer.masksToBounds = true
-        button.layer.borderColor = UIColor.lightGray.cgColor
-        button.layer.borderWidth = 0.2
-        button.addTarget(self, action: #selector(addMessage), for: .touchUpInside)
-        return button
-    }()
-    
-    let textView: UITextView = {
-        let view = UITextView()
-        view.text = "Enter message"
-        view.textColor = .lightGray
-        view.layer.cornerRadius = 10
-        view.layer.masksToBounds = true
-        view.font = UIFont(name: "verdana", size: 13.0)
-        view.backgroundColor = .white
-        view.layer.borderColor = UIColor.lightGray.cgColor
-        view.layer.borderWidth = 0.4
-        return view
-    }()
 }
 
 // MARK: - TableView Delegate

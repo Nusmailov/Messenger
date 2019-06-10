@@ -6,31 +6,8 @@
 //  Copyright © 2019 Nurzhigit Smailov. All rights reserved.
 //
 
+import Foundation
 import UIKit
-import CoreData
-
-enum MessageType: Int {
-    case inComing = 0
-    case outGoing = 1
-    
-    var backgroundColor: UIColor {
-        switch self {
-        case .inComing:
-            return UIColor(white: 0.9, alpha: 1)
-        case .outGoing:
-            return .blue
-        }
-    }
-    
-    var textColor: UIColor {
-        switch self {
-        case .inComing:
-            return .black
-        case .outGoing:
-            return .white
-        }
-    }
-}
 
 class Message {
     var text: String?
@@ -39,32 +16,30 @@ class Message {
     var urlVideo: String?
     var urlImage: String?
     //    var friend: Friend
-    var dbfriend: DBFriend
+    var dbFriend: DBFriend
     var status: MessageType
     
-    init(text: String, date: Date, status: Int, dbfriend: DBFriend) {
+    init(text: String, date: Date, status: Int, dbFriend: DBFriend) {
         self.text = text
         self.date = date
         self.status = MessageType(rawValue: status) ?? .inComing
-        self.dbfriend = dbfriend
+        self.dbFriend = dbFriend
     }
    
-    init(text: String, date: Date, status: MessageType, image: UIImage, dbfriend: DBFriend) {
+    init(text: String, date: Date, status: MessageType, image: UIImage, dbFriend: DBFriend) {
         self.text = text
         self.date = date
         self.status = status
         self.image = image
-        self.dbfriend = dbfriend
+        self.dbFriend = dbFriend
     }
     
-    
-    init(fromMessage message: NSManagedObject) {
-        self.text = (message.value(forKey: "text") as? String) ?? ""
-        self.dbfriend = (message.value(forKey: "friend") as? DBFriend)!
-        self.status = (message.value(forKey: "type") as? Int).map { MessageType(rawValue: $0) ?? .inComing }!
-        self.urlVideo = (message.value(forKey: "urlVideo" )as? String) ?? ""
-        self.urlImage = (message.value(forKey: "urlImage" )as? String) ?? ""
-        self.date = (message.value(forKey: "date") as? Date)!
+    init(text: String, date: Date,status: MessageType, dbFriend: DBFriend, urlVideo: String, urlImage: String) {
+        self.text = text
+        self.date = date
+        self.status = status
+        self.dbFriend = dbFriend
+        self.urlVideo = urlVideo
+        self.urlImage = urlImage
     }
-
 }

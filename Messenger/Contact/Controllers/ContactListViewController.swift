@@ -7,8 +7,6 @@
 //
 
 import UIKit
-import SVProgressHUD
-import SDWebImage
 import CoreData
 
 class ContactListViewController: UICollectionViewController {
@@ -41,14 +39,14 @@ class ContactListViewController: UICollectionViewController {
 // MARK: - ContactView Extension Views
 extension ContactListViewController: ContactView {
     func showLoading() {
-        SVProgressHUD.show()
+//        SVProgressHUD.show()
     }
     func showContact(contacts: [Contact]) {
         self.contacts = contacts
         collectionView.reloadData()
     }
     func hideLoading() {
-        SVProgressHUD.dismiss()
+//        SVProgressHUD.dismiss()
     }
     func showError(errorMessage: String) {
         print(errorMessage)

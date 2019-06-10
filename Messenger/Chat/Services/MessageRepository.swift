@@ -48,7 +48,15 @@ class MessageRepository {
                 break
         }
         do {
-            return try managedContext.fetch(fetchRequest).map { Message(fromMessage: $0) }
+            return try managedContext.fetch(fetchRequest).map {
+                let text = ($0.value(forKey: "text") as? String) ?? ""
+                let dbfriend = ($0.value(forKey: "friend") as? DBFriend)!
+                let status = ($0.value(forKey: "type") as? Int).map { MessageType(rawValue: $0) ?? .inComing }!
+                let urlVideo = ($0.value(forKey: "urlVideo" )as? String) ?? ""
+                let urlImage = ($0.value(forKey: "urlImage" )as? String) ?? ""
+                let date = ($0.value(forKey: "date") as? Date)!
+                return Message(text: text, date: date, status: status, dbFriend: dbfriend, urlVideo: urlVideo, urlImage: urlImage)
+            }
         } catch {
             return []
         }

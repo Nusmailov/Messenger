@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 class Contact{
     public var name: String
     public var surname: String

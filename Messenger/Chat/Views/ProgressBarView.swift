@@ -70,4 +70,5 @@ class ProgressBarView: UIView {
             update.left.right.top.bottom.equalToSuperview()
         })
     }
+    
 }
