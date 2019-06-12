@@ -127,7 +127,7 @@ class ChatTableViewController: UIViewController {
             self?.present(coordinator.navigationController, animated: true)
         }
         
-        let camera = UIAlertAction(title: "Camera", style: .default) {[weak self] (action) in
+        let camera = UIAlertAction(title: "Camera", style: .default) { [weak self] (action) in
             let coordinator = MediaCoordinator()
             coordinator.start(type: .Camera)
             coordinator.didPickMedia = { (image, text) in

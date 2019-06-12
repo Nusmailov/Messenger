@@ -32,6 +32,10 @@ class ContactListViewController: UICollectionViewController {
         collectionView?.register(ContactViewCell.self, forCellWithReuseIdentifier: cellid)
         collectionView.alwaysBounceVertical = true
         collectionView.backgroundColor = .white
+//        people = ContactRepository.retrieveContacts()
+        do{
+            try? ContactRepository.addContact(withName: "Daulet", surname: "Dauletov", phone: "87071234567")
+        }
         people = ContactRepository.retrieveContacts()
     }
 }

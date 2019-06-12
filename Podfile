@@ -6,9 +6,5 @@ target 'Messenger' do
   use_frameworks!
 
   # Pods for Messenger
-	pod 'Alamofire'
-	pod 'SVProgressHUD'
-	pod 'SDWebImage'
 	pod 'SnapKit'
-	pod 'SwiftyJSON'
 end
