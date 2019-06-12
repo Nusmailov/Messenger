@@ -96,8 +96,11 @@ class ChatTableViewController: UIViewController {
         setupTableView()
         setupTextContainer()
         keyboardHeight()
-        dbFriend = FriendRepository.retrieveDBFriend()
         messages = MessageRepository.retrieveMessages()
+        do{
+            try? FriendRepository.createFriend(withName: "Nurzhigit", withProfileImage: "friendImage")
+        }
+        dbFriend = FriendRepository.retrieveDBFriend()
     }
     
     // MARK: - Button Action methods
