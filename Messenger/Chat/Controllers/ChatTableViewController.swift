@@ -351,6 +351,7 @@ extension ChatTableViewController: DownloaderDelegate {
                 cell.startAnimatingIfNeeded()
                 cell.progressCounter = self.progressProcent
                 cell.actionButton.setImage(UIImage(named:"close"), for: .normal)
+                cell.stateTimer = 1
             }
         }
     }

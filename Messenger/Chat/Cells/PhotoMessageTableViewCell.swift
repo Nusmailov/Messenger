@@ -173,6 +173,8 @@ class PhotoMessageTableViewCell: UITableViewCell {
         if !starter {
             starter = true
             showHideAnimating()
+            stateTimer = 1
+        
             rotateViewTimer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(rotateView), userInfo: nil, repeats: true)
         }
     }
@@ -198,24 +200,30 @@ class PhotoMessageTableViewCell: UITableViewCell {
     
     @objc func actionLoader() {
         if(stateTimer == 1) {
+            
             actionButton.setImage(UIImage(named: "download-icon"), for: .normal)
-            progressBar.isHidden = true
             radianRotate = 0
             stateTimer = 2
             progressBar.progress = 0
+            progressBar.isHidden = true
             delegate?.didTapStopButton()
+//            startAnimatingIfNeeded()
         }
         else if(stateTimer == 2) {
+            
             actionButton.setImage(UIImage(named: "close"), for: .normal)
+            radianRotate = 0
             progressBar.progress = 0
             progressBar.isHidden = false
             stateTimer = 1
             delegate?.didTapStartButton()
+            startAnimatingIfNeeded()
         }
         else if(stateTimer == 3) {
+            
             delegate?.didTapStartVideo()
         }
-        startAnimatingIfNeeded()
+        
     }
     
     public static func videoSnapshot(filePathLocal: NSString) -> UIImage? {
