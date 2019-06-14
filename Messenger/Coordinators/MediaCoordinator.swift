@@ -29,7 +29,7 @@ class MediaCoordinator {
     
     func showGallery() {
         let vc = PhotoGalleryViewController()
-        vc.didTakePhoto = {[weak self](image) in
+        vc.didTakePhoto = {[weak self] (image) in
             self?.showResultVC(withImage: image)
         }
         navigationController = UINavigationController(rootViewController: vc)
@@ -37,7 +37,7 @@ class MediaCoordinator {
     
     func showCamera() {
         let vc = CameraViewController()
-        vc.didCapturePhoto = {[weak self](image) in
+        vc.didCapturePhoto = {[weak self] (image) in
             self?.showResultVC(withImage: image)
         }
         navigationController = UINavigationController(rootViewController: vc)

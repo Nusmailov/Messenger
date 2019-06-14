@@ -29,7 +29,6 @@ class ChatTableViewController: UIViewController {
     private var playerLayer:AVPlayerLayer?
     
     private var coreMessages: [Message] = []
-    private var coreFriends: [Friend] = []
     private var dbFriend: [DBFriend] = []
     private var messages = [Message]()
     private let presenter = MessagePresenter()
@@ -97,10 +96,8 @@ class ChatTableViewController: UIViewController {
         setupTextContainer()
         keyboardHeight()
         messages = MessageRepository.retrieveMessages()
-        do{
-            try? FriendRepository.createFriend(withName: "Nurzhigit", withProfileImage: "friendImage")
-        }
         dbFriend = FriendRepository.retrieveDBFriend()
+        
     }
     
     // MARK: - Button Action methods
