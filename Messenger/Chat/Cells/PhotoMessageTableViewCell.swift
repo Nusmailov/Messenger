@@ -189,7 +189,6 @@ class PhotoMessageTableViewCell: UITableViewCell {
             progressCounter = 0
             starter = false
             showHideAnimating()
-            
             if rotateViewTimer != nil {
                 rotateViewTimer.invalidate()
             }

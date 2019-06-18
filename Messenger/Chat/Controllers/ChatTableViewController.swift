@@ -100,6 +100,7 @@ class ChatTableViewController: UIViewController {
             try? FriendRepository.createFriend(withName: "Nurzhigit", withProfileImage: "friendImage")
         }
         dbFriend = FriendRepository.retrieveDBFriend()
+        
     }
     
     // MARK: - Button Action methods
@@ -147,12 +148,18 @@ class ChatTableViewController: UIViewController {
         }
         
         let addImage = UIAlertAction(title: "Add Image", style: .default) { [weak self] (action) in
-            let message = Message(text: self?.textView.text ?? "", date: Date.init(timeIntervalSinceNow: 86400), status: .outGoing, image: UIImage(), dbFriend: DBFriend())
+            var text: String
+            if self?.textView.text == "Enter message"{
+                text = ""
+            }else{
+                text = (self?.textView.text)!
+            }
+            let message = Message(text: text, date: Date.init(timeIntervalSinceNow: 86400), status: .outGoing, image: UIImage(), dbFriend: DBFriend())
             do {
                 guard let unwrappedMessages = self?.messages else { return }
                 self?.messages = [message] + unwrappedMessages
                 self?.tableView.reloadData()
-                self?.downloader.download()
+                self?.downloader.download(index: 0)
             }
         }
         
@@ -162,7 +169,7 @@ class ChatTableViewController: UIViewController {
                 guard let unwrappedMessages = self?.messages else { return }
                 self?.messages = [message]  + unwrappedMessages
                 self?.tableView.reloadData()
-                self?.downloader.download()
+                self?.downloader.download(index: 1)
             }
         }
         
@@ -284,6 +291,9 @@ extension ChatTableViewController: UITableViewDataSource, UITableViewDelegate {
             cell.imageMessage.image = image
             cell.messageLabel.text = messages[indexPath.item].text
             cell.setStatus(status: messages[indexPath.item].status)
+            cell.blurView.isHidden = true
+            cell.actionButton.isHidden = true
+            cell.progressBar.isHidden = true
             cell.transform = CGAffineTransform(scaleX: 1, y: -1)
             cell.selectionStyle = .none
             cell.delegate = self
@@ -296,9 +306,6 @@ extension ChatTableViewController: UITableViewDataSource, UITableViewDelegate {
             cell.transform = CGAffineTransform(scaleX: 1, y: -1)
             cell.selectionStyle = .none
             cell.delegate = self
-            if let messager = messages[indexPath.item].urlVideo {
-                print(messager)
-            }
             cell.actionButton.setImage(UIImage(named: "play-button"), for: .normal)
             return cell
         }
@@ -352,6 +359,7 @@ extension ChatTableViewController: DownloaderDelegate {
             if let cell = self.tableView.cellForRow(at: index) as? PhotoMessageTableViewCell {
                 cell.startAnimatingIfNeeded()
                 cell.progressCounter = self.progressProcent
+                cell.actionButton.isHidden = false
                 cell.actionButton.setImage(UIImage(named:"close"), for: .normal)
                 cell.stateTimer = 1
             }
@@ -385,6 +393,6 @@ extension ChatTableViewController: StartStopAnimatingDelegate {
     }
     
     func didTapStartButton() {
-        self.downloader.download()
+        self.downloader.download(index: 1)
     }
 }
