@@ -80,7 +80,7 @@ class ChatTableViewController: UIViewController {
         return view
     }()
     
-    // MARK: - View controller lifecycle methods
+    // MARK: - Lifecycle
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: animated)
@@ -97,6 +97,11 @@ class ChatTableViewController: UIViewController {
         keyboardHeight()
         messages = MessageRepository.retrieveMessages()
         dbFriend = FriendRepository.retrieveDBFriend()
+//        for i in 0...10{
+//            do{
+//                try? MessageRepository.deleteMessage(withText: "This is America")
+//            }
+//        }
         
     }
     
@@ -106,7 +111,7 @@ class ChatTableViewController: UIViewController {
         
         let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
-        let photo = UIAlertAction(title: "Photo & Video Library", style: .default){ [weak self] action in
+        let photo = UIAlertAction(title: "Photo & Video Library", style: .default) { [weak self] action in
             let coordinator = MediaCoordinator()
             coordinator.start(type: .Gallery)
             coordinator.didPickMedia = { (image,text) in
