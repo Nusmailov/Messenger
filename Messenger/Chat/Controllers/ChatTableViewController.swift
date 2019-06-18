@@ -96,13 +96,10 @@ class ChatTableViewController: UIViewController {
         setupTextContainer()
         keyboardHeight()
         messages = MessageRepository.retrieveMessages()
+        do{
+            try? FriendRepository.createFriend(withName: "Nurzhigit", withProfileImage: "friendImage")
+        }
         dbFriend = FriendRepository.retrieveDBFriend()
-//        for i in 0...10{
-//            do{
-//                try? MessageRepository.deleteMessage(withText: "This is America")
-//            }
-//        }
-        
     }
     
     // MARK: - Button Action methods
