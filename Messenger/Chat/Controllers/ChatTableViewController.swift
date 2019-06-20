@@ -96,7 +96,7 @@ class ChatTableViewController: UIViewController {
         setupTextContainer()
         keyboardHeight()
         messages = MessageRepository.retrieveMessages()
-        do{
+        do {
             try? FriendRepository.createFriend(withName: "Nurzhigit", withProfileImage: "friendImage")
         }
         dbFriend = FriendRepository.retrieveDBFriend()
@@ -151,7 +151,7 @@ class ChatTableViewController: UIViewController {
             var text: String
             if self?.textView.text == "Enter message"{
                 text = ""
-            }else{
+            } else  {
                 text = (self?.textView.text)!
             }
             let message = Message(text: text, date: Date.init(timeIntervalSinceNow: 86400), status: .outGoing, image: UIImage(), dbFriend: DBFriend())
@@ -329,7 +329,7 @@ extension ChatTableViewController: DownloaderDelegate {
     func didFinish(path: String) {
         DispatchQueue.main.async {
             if let cell = self.tableView.cellForRow(at: .init(row: 0, section: 0)) as? PhotoMessageTableViewCell {
-                cell.stateTimer = 3
+                cell.loaderProcessType = .startVideo
                 cell.actionButton.isHidden = false
                 do {
                     let videoName = "video.mp4"
@@ -361,7 +361,7 @@ extension ChatTableViewController: DownloaderDelegate {
                 cell.progressCounter = self.progressProcent
                 cell.actionButton.isHidden = false
                 cell.actionButton.setImage(UIImage(named:"close"), for: .normal)
-                cell.stateTimer = 1
+                cell.loaderProcessType = .started
             }
         }
     }
@@ -388,11 +388,11 @@ extension ChatTableViewController: StartStopAnimatingDelegate {
         }
     }
     
-    func didTapStopButton() {
+    func didTapStopDownload() {
         self.downloader.stopDownloading()
     }
     
-    func didTapStartButton() {
+    func didTapStartDownload() {
         self.downloader.download(index: 1)
     }
 }

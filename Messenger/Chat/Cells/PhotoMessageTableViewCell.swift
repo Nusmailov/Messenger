@@ -12,27 +12,35 @@ import AVKit
 
 // MARK: - AnimationProtocol
 protocol StartStopAnimatingDelegate: class {
-    func didTapStopButton()
-    func didTapStartButton()
+    func didTapStopDownload()
+    func didTapStartDownload()
     func didTapStartVideo()
 }
+
+
+enum LoaderProcessType {
+    case started
+    case stopped
+    case startVideo
+};
 
 class PhotoMessageTableViewCell: UITableViewCell {
     
     // MARK: - Properties
-    private var stateAnimating:Bool!
-    private var starter:Bool = false
+    private var stateAnimating: Bool!
+    private var isStartedLoader: Bool = false
     lazy var blurView = UIVisualEffectView(effect:  UIBlurEffect(style: .light))
-    private var pathCenter:CGPoint{ get{ return self.convert(self.center, from:self.superview) } }
-    public var stateTimer:Int!
+    private var pathCenter: CGPoint{ get { return self.convert(self.center, from:self.superview) } }
+    
     public var radianRotate = CGFloat(Double.pi)/18
     weak var rotateViewTimer:Timer!
     public var progressCounter:Float = 0 {
         didSet {
-            showProgressInAction()
+            loaderStateInProgress()
         }
     }
-    
+    private let processMaxValue:Float = 100.0
+    var loaderProcessType: LoaderProcessType?
     private var centerContraint:Constraint?
     private var leadingContraint:Constraint?
     private var trailingContraint:Constraint?
@@ -87,6 +95,7 @@ class PhotoMessageTableViewCell: UITableViewCell {
         setupViews()
     }
     
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -102,10 +111,9 @@ class PhotoMessageTableViewCell: UITableViewCell {
             leadingContraint = make.leading.equalToSuperview().offset(10).constraint
             trailingContraint = make.trailing.equalToSuperview().offset(-10).constraint
         }
-        
-        stateTimer = 1
+        loaderProcessType = .started
         stateAnimating = false
-        starter = false
+        isStartedLoader = false
         
         bubbleView.isUserInteractionEnabled = true
         bubbleView.addSubview(imageMessage)
@@ -150,6 +158,7 @@ class PhotoMessageTableViewCell: UITableViewCell {
             make.top.left.equalToSuperview().offset(15)
             make.right.bottom.equalToSuperview().offset(-15)
         }
+        
     }
     
     // MARK: - Loading Process Action Methods
@@ -170,10 +179,10 @@ class PhotoMessageTableViewCell: UITableViewCell {
     }
     
     func startAnimatingIfNeeded() {
-        if !starter {
-            starter = true
+        if !isStartedLoader {
+            isStartedLoader = true
             showHideAnimating()
-            stateTimer = 1
+            loaderProcessType = .started
             rotateViewTimer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(rotateView), userInfo: nil, repeats: true)
         }
     }
@@ -184,41 +193,47 @@ class PhotoMessageTableViewCell: UITableViewCell {
         stateAnimating = !stateAnimating
     }
     
-    @objc func showProgressInAction() {
-        if(progressCounter >= 100) {
+    @objc func loaderStateInProgress() {
+        if (progressCounter >= processMaxValue) {
+
             progressCounter = 0
-            starter = false
+            isStartedLoader = false
             showHideAnimating()
+            
             if rotateViewTimer != nil {
                 rotateViewTimer.invalidate()
             }
         }
-        progressBar.progress = progressCounter/100
+        progressBar.progress = progressCounter/processMaxValue
     }
     
     @objc func actionLoader() {
-        if(stateTimer == 1) {
+        switch loaderProcessType {
+        case .started?:
+            
             actionButton.setImage(UIImage(named: "download-icon"), for: .normal)
             radianRotate = 0
-            stateTimer = 2
+            loaderProcessType = .stopped
             progressBar.progress = 0
             progressBar.isHidden = true
-            delegate?.didTapStopButton()
-//            startAnimatingIfNeeded()
-        }
-        else if(stateTimer == 2) {
+            delegate?.didTapStopDownload()
+            
+        case .stopped?:
+            
             actionButton.setImage(UIImage(named: "close"), for: .normal)
             radianRotate = 0
             progressBar.progress = 0
             progressBar.isHidden = false
-            stateTimer = 1
-            delegate?.didTapStartButton()
+            loaderProcessType = .started
+            delegate?.didTapStartDownload()
             startAnimatingIfNeeded()
-        }
-        else if(stateTimer == 3) {
+            
+        case .startVideo?:
             delegate?.didTapStartVideo()
+            
+        case .none:
+            print("state must be nullable")
         }
-        
     }
     
     public static func videoSnapshot(filePathLocal: NSString) -> UIImage? {
