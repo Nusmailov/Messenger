@@ -34,7 +34,7 @@ class ChatTableViewController: UIViewController {
     private let presenter = MessagePresenter()
     private let downloader = Downloader()
     private var friend: Friend? {
-        didSet{
+        didSet {
             navigationItem.title = friend?.name
         }
     }

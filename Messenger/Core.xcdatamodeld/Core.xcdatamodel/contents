@@ -21,6 +21,6 @@
     <elements>
         <element name="DBContact" positionX="-580.0546875" positionY="159.203125" width="128" height="105"/>
         <element name="DBFriend" positionX="-234.17578125" positionY="196.3828125" width="128" height="73"/>
-        <element name="DBMessage" positionX="-335.54296875" positionY="-21.8046875" width="128" height="133"/>
+        <element name="DBMessage" positionX="-335.54296875" positionY="-21.8046875" width="128" height="135"/>
     </elements>
 </model>

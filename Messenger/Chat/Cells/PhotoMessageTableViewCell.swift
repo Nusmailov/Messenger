@@ -209,30 +209,30 @@ class PhotoMessageTableViewCell: UITableViewCell {
     
     @objc func actionLoader() {
         switch loaderProcessType {
-        case .started?:
+            case .started?:
+                
+                actionButton.setImage(UIImage(named: "download-icon"), for: .normal)
+                radianRotate = 0
+                loaderProcessType = .stopped
+                progressBar.progress = 0
+                progressBar.isHidden = true
+                delegate?.didTapStopDownload()
             
-            actionButton.setImage(UIImage(named: "download-icon"), for: .normal)
-            radianRotate = 0
-            loaderProcessType = .stopped
-            progressBar.progress = 0
-            progressBar.isHidden = true
-            delegate?.didTapStopDownload()
+            case .stopped?:
+                
+                actionButton.setImage(UIImage(named: "close"), for: .normal)
+                radianRotate = 0
+                progressBar.progress = 0
+                progressBar.isHidden = false
+                loaderProcessType = .started
+                delegate?.didTapStartDownload()
+                startAnimatingIfNeeded()
             
-        case .stopped?:
+            case .startVideo?:
+                delegate?.didTapStartVideo()
             
-            actionButton.setImage(UIImage(named: "close"), for: .normal)
-            radianRotate = 0
-            progressBar.progress = 0
-            progressBar.isHidden = false
-            loaderProcessType = .started
-            delegate?.didTapStartDownload()
-            startAnimatingIfNeeded()
-            
-        case .startVideo?:
-            delegate?.didTapStartVideo()
-            
-        case .none:
-            print("state must be nullable")
+            case .none:
+                print("state must be nullable")
         }
     }
     
@@ -240,8 +240,10 @@ class PhotoMessageTableViewCell: UITableViewCell {
         let vidURL = NSURL(fileURLWithPath: filePathLocal as String)
         let asset = AVURLAsset(url: vidURL as URL)
         let generator = AVAssetImageGenerator(asset: asset)
+        
         generator.appliesPreferredTrackTransform = true
         let timestamp = CMTime(seconds: 1, preferredTimescale: 60)
+        
         do {
             let imageRef = try generator.copyCGImage(at: timestamp, actualTime: nil)
             return UIImage(cgImage: imageRef)

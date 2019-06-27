@@ -88,8 +88,7 @@ class ChatViewCell: UITableViewCell {
         messageLabel.textColor = status.textColor
         if status == .inComing {
             leadingContraint?.activate()
-        }
-        else {
+        } else {
             trailingContraint?.activate()
         }
     }

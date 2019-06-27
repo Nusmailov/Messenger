@@ -28,8 +28,8 @@ class MessageRepository {
         message.setValue(friend, forKeyPath: "friend")
         message.setValue(date, forKeyPath: "date")
         message.setValue(status, forKeyPath: "type")
-        message.setValue(urlVideo, forKey:"urlVideo")
-        message.setValue(urlImage, forKey:"urlImage")
+        message.setValue(urlVideo, forKey: "urlVideo")
+        message.setValue(urlImage, forKey: "urlImage")
         
         try managedContext.save()
     }
@@ -52,8 +52,8 @@ class MessageRepository {
                 let text = (info.value(forKey: "text") as? String) ?? ""
                 let dbfriend = (info.value(forKey: "friend") as? DBFriend)!
                 let status = (info.value(forKey: "type") as? Int).map { MessageType(rawValue: $0) ?? .inComing }!
-                let urlVideo = (info.value(forKey: "urlVideo" )as? String) ?? ""
-                let urlImage = (info.value(forKey: "urlImage" )as? String) ?? ""
+                let urlVideo = (info.value(forKey: "urlVideo" ) as? String) ?? ""
+                let urlImage = (info.value(forKey: "urlImage" ) as? String) ?? ""
                 let date = (info.value(forKey: "date") as? Date)!
                 return Message(text: text, date: date, status: status, dbFriend: dbfriend, urlVideo: urlVideo, urlImage: urlImage)
             }
@@ -81,5 +81,4 @@ class MessageRepository {
         managedContext.delete(message)
         try managedContext.save()
     }
-    
 }
